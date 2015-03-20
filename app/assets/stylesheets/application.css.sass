@@ -47,10 +47,6 @@ h2
   height: 130px
   width: 130px
 
-.tile
-  height: 130px
-  width: 130px
-
 #game_container
   position: relative
   height: 750px
@@ -61,7 +57,18 @@ h2
     z-index: 1
 
   .tile
+    position: relative
+    height: 130px
+    width: 130px
     z-index: 2
+
+    .tile_value
+      position: absolute
+      width: 130px
+      font-size: 40px
+      top: 45px
+      text-align: center
+
 
   .row1
     position: absolute
@@ -104,22 +111,22 @@ h2
     left: 613px
 
   .power1
-    background-color: #fff
+    background-color: #ff8
 
   .power2
-    background-color: #eee
+    background-color: #ff0
 
   .power3
-    background-color: #ddd
+    background-color: #f80
 
   .power4
-    background-color: #ccc
+    background-color: #f00
 
   .power5
-    background-color: #bbb
+    background-color: #d0d
 
   .power6
-    background-color: #aaa
+    background-color: #08f
 
   .power7
     background-color: #999
