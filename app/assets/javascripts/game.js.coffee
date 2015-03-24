@@ -5,6 +5,7 @@ $ ->
 
   arrow_handler = (key) ->
     return if [37,38,39,40].indexOf(key.keyCode) < 0
+    window.tookAction = false
     if key.keyCode == 37
       conjoin_left()
       move_left()
@@ -17,7 +18,8 @@ $ ->
     if key.keyCode == 40
       conjoin_down()
       move_down()
-    create_new_div()
+    create_new_div() if window.tookAction
+    false
 
   create_new_div = ->
     power = if random_whole_number(4) == 2 then 2 else 1
@@ -27,7 +29,6 @@ $ ->
     klass = "tile row#{randomIndex['row']} column#{randomIndex['column']} power#{power}"
     div = "<div class='#{klass}' #{data}><div class='tile_value'>#{value}</div></div>"
     $('#tiles').append(div)
-    false
 
   random_index = () ->
     list = []
@@ -82,6 +83,7 @@ $ ->
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
+                      window.tookAction = true
                       l = 6
                       k = 5
                       j = 4
@@ -110,6 +112,7 @@ $ ->
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
+                      window.tookAction = true
                       l = 6
                       k = 5
                       j = 4
@@ -138,6 +141,7 @@ $ ->
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
+                      window.tookAction = true
                       l = 0
                       k = 1
                       j = 2
@@ -166,6 +170,7 @@ $ ->
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
+                      window.tookAction = true
                       l = 0
                       k = 1
                       j = 2
@@ -181,6 +186,7 @@ $ ->
     $(c).remove()
     $(b).data("power", (b.data("power")) + 1)
     $(b).removeClass("power" + (b.data("power") - 1)).addClass("power" + b.data("power"))
+    $(b).children().text(Math.pow(3, b.data("power")))
 
   move_left = () ->
     i = 1
@@ -193,6 +199,7 @@ $ ->
           if currentDiv.data("column") > firstEmpty
             $(currentDiv).removeClass('column' + (currentDiv.data("column"))).addClass('column' + firstEmpty)
             $(currentDiv).data("column", firstEmpty)
+            window.tookAction = true
           firstEmpty++
         j++
       i++
@@ -208,6 +215,7 @@ $ ->
           if currentDiv.data("row") > firstEmpty
             $(currentDiv).removeClass('row' + (currentDiv.data("row"))).addClass('row' + firstEmpty)
             $(currentDiv).data("row", firstEmpty)
+            window.tookAction = true
           firstEmpty++
         j++
       i++
@@ -223,6 +231,7 @@ $ ->
           if currentDiv.data("column") < firstEmpty
             $(currentDiv).removeClass('column' + (currentDiv.data("column"))).addClass('column' + firstEmpty)
             $(currentDiv).data("column", firstEmpty)
+            window.tookAction = true
           firstEmpty--
         j--
       i++
@@ -238,6 +247,7 @@ $ ->
           if currentDiv.data("row") < firstEmpty
             $(currentDiv).removeClass('row' + (currentDiv.data("row"))).addClass('row' + firstEmpty)
             $(currentDiv).data("row", firstEmpty)
+            window.tookAction = true
           firstEmpty--
         j--
       i++
