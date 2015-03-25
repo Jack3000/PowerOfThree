@@ -1,11 +1,18 @@
 $ ->
   $( document ).ready ->
     $('body').keydown(arrow_handler)
+    $('#newgame').on('click', restart)
+    create_new_div()
+
+  restart = () ->
+    $('.tile').remove()
+    $('.score_value').text(0)
     create_new_div()
 
   arrow_handler = (key) ->
     return if [37,38,39,40].indexOf(key.keyCode) < 0
     window.tookAction = false
+    window.checkMove = false
     if key.keyCode == 37
       conjoin_left()
       move_left()
@@ -19,7 +26,16 @@ $ ->
       conjoin_down()
       move_down()
     create_new_div() if window.tookAction
+    if window.list.length == 1
+      window.noMove = true
+      window.checkMove = true
+      conjoin_left()
+      conjoin_up()
+      gameOver() if window.noMove
     false
+
+  gameOver = () ->
+    alert('Game Over')
 
   create_new_div = ->
     power = if random_whole_number(4) == 2 then 2 else 1
@@ -31,20 +47,20 @@ $ ->
     $('#tiles').append(div)
 
   random_index = () ->
-    list = []
+    window.list = []
     i = 1
     while i <= 25
-      list.push i
+      window.list.push i
       i++
     existing_tiles = []
     $('.tile').each (index, el) ->
-      delete list[-1 + matrix_index($(el).data())]
+      delete window.list[-1 + matrix_index($(el).data())]
 
-    list = cleanArray(list)
+    window.list = cleanArray(window.list)
 
-    return if list.length == 0
+    return if window.list.length == 0
 
-    general_index = list[random_whole_number(list.length) - 1]
+    general_index = window.list[random_whole_number(window.list.length) - 1]
     if general_index % 5 == 0
       { row: 5, column: (general_index / 5)}
     else
@@ -65,6 +81,19 @@ $ ->
       i++
     newArray
 
+
+  joining = (a, b, c) ->
+    $(a).remove()
+    $(c).remove()
+    $(b).data("power", (b.data("power")) + 1)
+    $(b).removeClass("power" + (b.data("power") - 1)).addClass("power" + b.data("power"))
+    $(b).children().text(Math.pow(3, b.data("power")))
+    i = parseInt($('.score_value').text()) + Math.pow(3, b.data("power"))
+    $('.score_value').text(i)
+    j = parseInt($('.highscore_value').text())
+    $('.highscore_value').text(i) if i > j
+
+
   conjoin_left = () ->
     i = 1
     while i <= 5
@@ -82,11 +111,14 @@ $ ->
                   c = $('.row' + i + '.column' + l)
                   if c.length
                     if c.data("power") == b.data("power")
-                      joining(a, b, c)
-                      window.tookAction = true
-                      l = 6
-                      k = 5
-                      j = 4
+                      if window.checkMove
+                        window.noMove = false
+                      else
+                        joining(a, b, c)
+                        window.tookAction = true
+                        l = 6
+                        k = 5
+                        j = 4
                     l = 6
                   l++
               k = 5
@@ -111,11 +143,14 @@ $ ->
                   c = $('.column' + i + '.row' + l)
                   if c.length
                     if c.data("power") == b.data("power")
-                      joining(a, b, c)
-                      window.tookAction = true
-                      l = 6
-                      k = 5
-                      j = 4
+                      if window.checkMove
+                        window.noMove = false
+                      else
+                        joining(a, b, c)
+                        window.tookAction = true
+                        l = 6
+                        k = 5
+                        j = 4
                     l = 6
                   l++
               k = 5
@@ -180,13 +215,6 @@ $ ->
             k--
         j--
       i--
-
-  joining = (a, b, c, j, k, l) ->
-    $(a).remove()
-    $(c).remove()
-    $(b).data("power", (b.data("power")) + 1)
-    $(b).removeClass("power" + (b.data("power") - 1)).addClass("power" + b.data("power"))
-    $(b).children().text(Math.pow(3, b.data("power")))
 
   move_left = () ->
     i = 1
