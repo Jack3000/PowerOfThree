@@ -95,187 +95,184 @@ $ ->
 
 
   conjoin_left = () ->
-    i = 1
-    while i <= 5
-      j = 1
-      while j <= 3
-        a = $('.row' + i + '.column' + j)
+    row_index = 1
+    while row_index <= 5
+      first_column_index = 1
+      while first_column_index <= 3
+        a = $('.row' + row_index + '.column' + first_column_index)
         if a.length
-          k = j + 1
-          while k <= 4
-            b = $('.row' + i + '.column' + k)
+          second_column_index = first_column_index + 1
+          while second_column_index <= 4
+            b = $('.row' + row_index + '.column' + second_column_index)
             if b.length
               if a.data("power") == b.data("power")
-                l = k + 1
-                while l <= 5
-                  c = $('.row' + i + '.column' + l)
+                third_column_index = second_column_index + 1
+                while third_column_index <= 5
+                  c = $('.row' + row_index + '.column' + third_column_index)
                   if c.length
                     if c.data("power") == b.data("power")
                       if window.checkMove
                         window.noMove = false
                       else
                         joining(a, b, c)
-                        window.tookAction = true
-                        l = 6
-                        k = 5
-                        j = 4
-                    l = 6
-                  l++
-              k = 5
-            k++
-        j++
-      i++
-
-  conjoin_up = () ->
-    i = 1
-    while i <= 5
-      j = 1
-      while j <= 3
-        a = $('.column' + i + '.row' + j)
-        if a.length
-          k = j + 1
-          while k <= 4
-            b = $('.column' + i + '.row' + k)
-            if b.length
-              if a.data("power") == b.data("power")
-                l = k + 1
-                while l <= 5
-                  c = $('.column' + i + '.row' + l)
-                  if c.length
-                    if c.data("power") == b.data("power")
-                      if window.checkMove
-                        window.noMove = false
-                      else
-                        joining(a, b, c)
-                        window.tookAction = true
-                        l = 6
-                        k = 5
-                        j = 4
-                    l = 6
-                  l++
-              k = 5
-            k++
-        j++
-      i++
+                        third_column_index = 6
+                        second_column_index = 5
+                        first_column_index = 4
+                    third_column_index = 6
+                  third_column_index++
+              second_column_index = 5
+            second_column_index++
+        first_column_index++
+      row_index++
 
   conjoin_right = () ->
-    i = 5
-    while i >= 1
-      j = 5
-      while j >= 3
-        a = $('.row' + i + '.column' + j)
+    row_index = 5
+    while row_index >= 1
+      first_column_index = 5
+      while first_column_index >= 3
+        a = $('.row' + row_index + '.column' + first_column_index)
         if a.length
-          k = j - 1
-          while k >= 2
-            b = $('.row' + i + '.column' + k)
+          second_column_index = first_column_index - 1
+          while second_column_index >= 2
+            b = $('.row' + row_index + '.column' + second_column_index)
             if b.length
               if a.data("power") == b.data("power")
-                l = k - 1
-                while l >= 1
-                  c = $('.row' + i + '.column' + l)
+                third_column_index = second_column_index - 1
+                while third_column_index >= 1
+                  c = $('.row' + row_index + '.column' + third_column_index)
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
-                      window.tookAction = true
-                      l = 0
-                      k = 1
-                      j = 2
-                    l = 0
-                  l--
-              k = 1
-            k--
-        j--
-      i--
+                      third_column_index = 0
+                      second_column_index = 1
+                      first_column_index = 2
+                    third_column_index = 0
+                  third_column_index--
+              second_column_index = 1
+            second_column_index--
+        first_column_index--
+      row_index--
+
+  conjoin_up = () ->
+    column_index = 1
+    while column_index <= 5
+      first_row_index = 1
+      while first_row_index <= 3
+        a = $('.column' + column_index + '.row' + first_row_index)
+        if a.length
+          second_row_index = first_row_index + 1
+          while second_row_index <= 4
+            b = $('.column' + column_index + '.row' + second_row_index)
+            if b.length
+              if a.data("power") == b.data("power")
+                third_row_index = second_row_index + 1
+                while third_row_index <= 5
+                  c = $('.column' + column_index + '.row' + third_row_index)
+                  if c.length
+                    if c.data("power") == b.data("power")
+                      if window.checkMove
+                        window.noMove = false
+                      else
+                        joining(a, b, c)
+                        third_row_index = 6
+                        second_row_index = 5
+                        first_row_index = 4
+                    third_row_index = 6
+                  third_row_index++
+              second_row_index = 5
+            second_row_index++
+        first_row_index++
+      column_index++
 
   conjoin_down = () ->
-    i = 5
-    while i >= 1
-      j = 5
-      while j >= 3
-        a = $('.column' + i + '.row' + j)
+    column_index = 5
+    while column_index >= 1
+      first_row_index = 5
+      while first_row_index >= 3
+        a = $('.column' + column_index + '.row' + first_row_index)
         if a.length
-          k = j - 1
-          while k >= 2
-            b = $('.column' + i + '.row' + k)
+          second_row_index = first_row_index - 1
+          while second_row_index >= 2
+            b = $('.column' + column_index + '.row' + second_row_index)
             if b.length
               if a.data("power") == b.data("power")
-                l = k - 1
-                while l >= 1
-                  c = $('.column' + i + '.row' + l)
+                third_row_index = second_row_index - 1
+                while third_row_index >= 1
+                  c = $('.column' + column_index + '.row' + third_row_index)
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
-                      window.tookAction = true
-                      l = 0
-                      k = 1
-                      j = 2
-                    l = 0
-                  l--
-              k = 1
-            k--
-        j--
-      i--
+                      third_row_index = 0
+                      second_row_index = 1
+                      first_row_index = 2
+                    third_row_index = 0
+                  third_row_index--
+              second_row_index = 1
+            second_row_index--
+        first_row_index--
+      column_index--
 
   move_left = () ->
-    i = 1
-    while i <= 5
+    row_index = 1
+    while row_index <= 5
       firstEmpty = 1
-      j = 1
-      while j <= 5
-        currentDiv = $('.row' + i + '.column' + j)
+      column_index = 1
+      while column_index <= 5
+        currentDiv = get_tile(row_index, column_index)
         if currentDiv.length
           if currentDiv.data("column") > firstEmpty
-            $(currentDiv).removeClass('column' + (currentDiv.data("column"))).addClass('column' + firstEmpty)
-            $(currentDiv).data("column", firstEmpty)
-            window.tookAction = true
+            move_tile(currentDiv, firstEmpty, 'column')
           firstEmpty++
-        j++
-      i++
-
-  move_up = () ->
-    i = 1
-    while i <= 5
-      firstEmpty = 1
-      j = 1
-      while j <= 5
-        currentDiv = $('.column' + i + '.row' + j)
-        if currentDiv.length
-          if currentDiv.data("row") > firstEmpty
-            $(currentDiv).removeClass('row' + (currentDiv.data("row"))).addClass('row' + firstEmpty)
-            $(currentDiv).data("row", firstEmpty)
-            window.tookAction = true
-          firstEmpty++
-        j++
-      i++
+        column_index++
+      row_index++
 
   move_right = () ->
-    i = 1
-    while i <= 5
+    row_index = 1
+    while row_index <= 5
       firstEmpty = 5
-      j = 5
-      while j >= 1
-        currentDiv = $('.row' + i + '.column' + j)
+      column_index = 5
+      while column_index >= 1
+        currentDiv = get_tile(row_index, column_index)
         if currentDiv.length
           if currentDiv.data("column") < firstEmpty
-            $(currentDiv).removeClass('column' + (currentDiv.data("column"))).addClass('column' + firstEmpty)
-            $(currentDiv).data("column", firstEmpty)
-            window.tookAction = true
+            move_tile(currentDiv, firstEmpty, 'column')
           firstEmpty--
-        j--
-      i++
+        column_index--
+      row_index++
+
+  move_up = () ->
+    column_index = 1
+    while column_index <= 5
+      firstEmpty = 1
+      row_index = 1
+      while row_index <= 5
+        currentDiv = get_tile(row_index, column_index)
+        if currentDiv.length
+          if currentDiv.data("row") > firstEmpty
+            move_tile(currentDiv, firstEmpty, 'row')
+          firstEmpty++
+        row_index++
+      column_index++
+
 
   move_down = () ->
-    i = 1
-    while i <= 5
+    column_index = 1
+    while column_index <= 5
       firstEmpty = 5
-      j = 5
-      while j >= 1
-        currentDiv = $('.column' + i + '.row' + j)
+      row_index = 5
+      while row_index >= 1
+        currentDiv = get_tile(row_index, column_index)
         if currentDiv.length
           if currentDiv.data("row") < firstEmpty
-            $(currentDiv).removeClass('row' + (currentDiv.data("row"))).addClass('row' + firstEmpty)
-            $(currentDiv).data("row", firstEmpty)
-            window.tookAction = true
+            move_tile(currentDiv, firstEmpty, 'row')
           firstEmpty--
-        j--
-      i++
+        row_index--
+      column_index++
+
+  get_tile = (row_index, column_index) ->
+    $('.column' + column_index + '.row' + row_index)
+
+  move_tile = (tile, firstEmpty, row_or_column) ->
+    $(tile).removeClass(row_or_column + (tile.data(row_or_column))).addClass(row_or_column + firstEmpty)
+    $(tile).data(row_or_column, firstEmpty)
+    window.tookAction = true

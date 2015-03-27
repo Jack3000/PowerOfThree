@@ -1,7 +1,10 @@
 module ApplicationHelper
 
   BOARD_SIZE = 5
-  TILES = BOARD_SIZE * BOARD_SIZE
+
+  def board_size
+    BOARD_SIZE
+  end
 
   def build_game_board
     (1..BOARD_SIZE).map do |i|

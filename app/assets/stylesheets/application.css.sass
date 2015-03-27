@@ -1,3 +1,5 @@
+@import "common"
+
 body
   width: 800px
   margin: 7.5% auto 0
@@ -73,42 +75,52 @@ h2
   .row1
     position: absolute
     top: 13px
+    @include move-tile()
 
   .row2
     position: absolute
     top: 162px
+    @include move-tile()
 
   .row3
     position: absolute
     top: 311px
+    @include move-tile()
 
   .row4
     position: absolute
     top: 460px
+    @include move-tile()
 
   .row5
     position: absolute
     top: 609px
+    @include move-tile()
 
   .column1
     position: absolute
     left: 13px
+    @include move-tile()
 
   .column2
     position: absolute
     left: 163px
+    @include move-tile()
 
   .column3
     position: absolute
     left: 313px
+    @include move-tile()
 
   .column4
     position: absolute
     left: 463px
+    @include move-tile()
 
   .column5
     position: absolute
     left: 613px
+    @include move-tile()
 
   .power1
     background-color: #ff8
