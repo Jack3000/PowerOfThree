@@ -41,7 +41,6 @@ $ ->
     false
 
   gameOver = () ->
-    alert('Game Over')
     window.gameOver = true
     div = "<div id='game_over'>Game Over<input type='submit' class='restarter' value='restart?'></div>"
     $('#game_container').append(div)
