@@ -2,7 +2,7 @@
 
 %h2= @title
 #abovegame
-  %input{type: "button", value: "new game", id: "newgame"}
+  %input{type: "button", value: "new game", class: "restarter"}
   #highscore
     highscore
     .highscore_value
@@ -16,3 +16,5 @@
   #board{ data: {size: board_size} }
     - build_game_board
   #tiles
+
+.bottom_of_body

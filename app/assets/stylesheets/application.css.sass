@@ -1,9 +1,15 @@
 @import "common"
 
+$board_size: 6
+
 body
   width: 800px
-  margin: 7.5% auto 0
+  margin: 2.5% auto 0
   background-color: #808080
+
+.bottom_of_body
+  height: 50px
+  background-color: #b0b0b0
 
 #main
   background-color: #b0b0b0
@@ -12,16 +18,7 @@ h2
   text-align: center
   padding: 25px
 
-#board
-  position: absolute
-  left: 50%
-  margin-left: -375px
-  border: 3px #000000 solid
-  width: 750px
-  height: 750px
-  background-color: #c0c0c0
-
-#newgame
+.restarter
   display: inline-block
   margin: 15px
   height: 30px
@@ -33,94 +30,78 @@ h2
   height: 30px
   width: 150px
 
-.board_row
-  width: 750px
-  height: 135px
-  margin: 0 0 10px 0
-  display: inline-block
-
-.first_row
-  margin: 10px 0
-
-.board_cell
-  background-color: #909090
-  margin: 0 10px
-  float: left
-  height: 130px
-  width: 130px
 
 #game_container
   position: relative
-  height: 750px
-  width: 750px
-  margin: 5px auto 25px
+  width: $board_size * 120px
+  height: $board_size * 120px
+  max-width: 720px
+  max-height: 720px
+  margin: 5px auto 0
+  border: 3px #000000 solid
+  font-size: 0
 
   #board
-    z-index: 1
+    position: absolute
+    left: 50%
+    margin-left: -50%
+    width: 100%
+    height: 100%
+    background-color: #c0c0c0
+
+    .board_row
+      width: 100%
+      height: percentage(5 / 6 / $board_size)
+      display: inline-block
+
+      .board_cell
+        background-color: #909090
+        margin: 0 percentage(1 / 12 / $board_size) 0
+        float: left
+        height: 100%
+        width: percentage(5 / 6 / $board_size)
+
+    .afirst_row
+      margin: percentage(1 / 12 / $board_size) 0 0
 
   .tile
     position: relative
-    height: 130px
-    width: 130px
-    z-index: 2
+    height: percentage(5 / 6 / $board_size)
+    width: percentage(5 / 6 / $board_size)
 
     .tile_value
       position: absolute
-      width: 130px
-      font-size: 40px
-      top: 45px
+      width: 100%
+      font-size: 25px
+      top: 37.5%
       text-align: center
 
+  #game_over
+    z-index: 1
+    width: 70%
+    height: 70%
+    padding: 15%
+    background-color: #888
+    opacity: 0.75
+    font-size: 50px
+    text-align: center
 
-  .row1
-    position: absolute
-    top: 13px
-    @include move-tile()
+    .restarter
+      display: block
+      margin: 25% auto
 
-  .row2
-    position: absolute
-    top: 162px
-    @include move-tile()
 
-  .row3
-    position: absolute
-    top: 311px
-    @include move-tile()
+  @for $i from 1 through $board_size
+    .row#{$i}
+      position: absolute
+      top: percentage((1 / 12 + $i - 1) / $board_size)
+      @include move-tile()
 
-  .row4
-    position: absolute
-    top: 460px
-    @include move-tile()
-
-  .row5
-    position: absolute
-    top: 609px
-    @include move-tile()
-
-  .column1
-    position: absolute
-    left: 13px
-    @include move-tile()
-
-  .column2
-    position: absolute
-    left: 163px
-    @include move-tile()
-
-  .column3
-    position: absolute
-    left: 313px
-    @include move-tile()
-
-  .column4
-    position: absolute
-    left: 463px
-    @include move-tile()
-
-  .column5
-    position: absolute
-    left: 613px
-    @include move-tile()
+  @for $i from 1 through $board_size
+    .column#{$i}
+      position: absolute
+      left: percentage((1 / 12 + $i - 1) / $board_size)
+      @include move-tile()
 
   .power1
     background-color: #ff8

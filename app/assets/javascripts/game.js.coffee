@@ -1,16 +1,22 @@
 $ ->
   $( document ).ready ->
     $('body').keydown(arrow_handler)
-    $('#newgame').on('click', restart)
+    $('.restarter').on('click', restart)
     create_new_div()
+
+  window.board_size = 6
+  window.gameOver = false
 
   restart = () ->
     $('.tile').remove()
     $('.score_value').text(0)
+    $('#game_over').remove()
+    window.gameOver = false
     create_new_div()
 
   arrow_handler = (key) ->
     return if [37,38,39,40].indexOf(key.keyCode) < 0
+    return false if window.gameOver
     window.tookAction = false
     window.checkMove = false
     if key.keyCode == 37
@@ -36,6 +42,15 @@ $ ->
 
   gameOver = () ->
     alert('Game Over')
+    window.gameOver = true
+    div = "<div id='game_over'>Game Over<input type='submit' class='restarter' value='restart?'></div>"
+    $('#game_container').append(div)
+    $('.restarter').on('click', restart)
+    # $.ajax
+    #   url: my_url
+    #   data: highscore
+    #   type: 'post'
+
 
   create_new_div = ->
     power = if random_whole_number(4) == 2 then 2 else 1
@@ -49,7 +64,7 @@ $ ->
   random_index = () ->
     window.list = []
     i = 1
-    while i <= 25
+    while i <= window.board_size * window.board_size
       window.list.push i
       i++
     existing_tiles = []
@@ -61,16 +76,16 @@ $ ->
     return if window.list.length == 0
 
     general_index = window.list[random_whole_number(window.list.length) - 1]
-    if general_index % 5 == 0
-      { row: 5, column: (general_index / 5)}
+    if general_index % window.board_size == 0
+      { row: window.board_size, column: (general_index / window.board_size)}
     else
-      {row: (general_index % 5), column: Math.floor(general_index / 5) + 1}
+      {row: (general_index % window.board_size), column: Math.floor(general_index / window.board_size) + 1}
 
   random_whole_number = (num) ->
     Math.floor((Math.random() * num) + 1)
 
   matrix_index = (data) ->
-    (data['column'] - 1) * 5 + data['row']
+    (data['column'] - 1) * window.board_size + data['row']
 
   cleanArray = (original) ->
     newArray = new Array
@@ -96,18 +111,18 @@ $ ->
 
   conjoin_left = () ->
     row_index = 1
-    while row_index <= 5
+    while row_index <= window.board_size
       first_column_index = 1
-      while first_column_index <= 3
+      while first_column_index <= window.board_size - 2
         a = $('.row' + row_index + '.column' + first_column_index)
         if a.length
           second_column_index = first_column_index + 1
-          while second_column_index <= 4
+          while second_column_index <= window.board_size - 1
             b = $('.row' + row_index + '.column' + second_column_index)
             if b.length
               if a.data("power") == b.data("power")
                 third_column_index = second_column_index + 1
-                while third_column_index <= 5
+                while third_column_index <= window.board_size
                   c = $('.row' + row_index + '.column' + third_column_index)
                   if c.length
                     if c.data("power") == b.data("power")
@@ -115,20 +130,20 @@ $ ->
                         window.noMove = false
                       else
                         joining(a, b, c)
-                        third_column_index = 6
-                        second_column_index = 5
-                        first_column_index = 4
-                    third_column_index = 6
+                        first_column_index = third_column_index
+                        second_column_index = window.board_size
+                        third_column_index = window.board_size + 1
+                    third_column_index = window.board_size + 1
                   third_column_index++
-              second_column_index = 5
+              second_column_index = window.board_size
             second_column_index++
         first_column_index++
       row_index++
 
   conjoin_right = () ->
-    row_index = 5
+    row_index = window.board_size
     while row_index >= 1
-      first_column_index = 5
+      first_column_index = window.board_size
       while first_column_index >= 3
         a = $('.row' + row_index + '.column' + first_column_index)
         if a.length
@@ -143,9 +158,9 @@ $ ->
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
-                      third_column_index = 0
+                      first_column_index = third_column_index
                       second_column_index = 1
-                      first_column_index = 2
+                      third_column_index = 0
                     third_column_index = 0
                   third_column_index--
               second_column_index = 1
@@ -155,18 +170,18 @@ $ ->
 
   conjoin_up = () ->
     column_index = 1
-    while column_index <= 5
+    while column_index <= window.board_size
       first_row_index = 1
-      while first_row_index <= 3
+      while first_row_index <= window.board_size - 2
         a = $('.column' + column_index + '.row' + first_row_index)
         if a.length
           second_row_index = first_row_index + 1
-          while second_row_index <= 4
+          while second_row_index <= window.board_size - 1
             b = $('.column' + column_index + '.row' + second_row_index)
             if b.length
               if a.data("power") == b.data("power")
                 third_row_index = second_row_index + 1
-                while third_row_index <= 5
+                while third_row_index <= window.board_size
                   c = $('.column' + column_index + '.row' + third_row_index)
                   if c.length
                     if c.data("power") == b.data("power")
@@ -174,20 +189,20 @@ $ ->
                         window.noMove = false
                       else
                         joining(a, b, c)
-                        third_row_index = 6
-                        second_row_index = 5
-                        first_row_index = 4
-                    third_row_index = 6
+                        first_row_index = third_row_index
+                        second_row_index = window.board_size
+                        third_row_index = window.board_size + 1
+                    third_row_index = window.board_size + 1
                   third_row_index++
-              second_row_index = 5
+              second_row_index = window.board_size
             second_row_index++
         first_row_index++
       column_index++
 
   conjoin_down = () ->
-    column_index = 5
+    column_index = window.board_size
     while column_index >= 1
-      first_row_index = 5
+      first_row_index = window.board_size
       while first_row_index >= 3
         a = $('.column' + column_index + '.row' + first_row_index)
         if a.length
@@ -202,9 +217,9 @@ $ ->
                   if c.length
                     if c.data("power") == b.data("power")
                       joining(a, b, c)
-                      third_row_index = 0
+                      first_row_index = third_row_index
                       second_row_index = 1
-                      first_row_index = 2
+                      third_row_index = 0
                     third_row_index = 0
                   third_row_index--
               second_row_index = 1
@@ -214,10 +229,10 @@ $ ->
 
   move_left = () ->
     row_index = 1
-    while row_index <= 5
+    while row_index <= window.board_size
       firstEmpty = 1
       column_index = 1
-      while column_index <= 5
+      while column_index <= window.board_size
         currentDiv = get_tile(row_index, column_index)
         if currentDiv.length
           if currentDiv.data("column") > firstEmpty
@@ -228,9 +243,9 @@ $ ->
 
   move_right = () ->
     row_index = 1
-    while row_index <= 5
-      firstEmpty = 5
-      column_index = 5
+    while row_index <= window.board_size
+      firstEmpty = window.board_size
+      column_index = window.board_size
       while column_index >= 1
         currentDiv = get_tile(row_index, column_index)
         if currentDiv.length
@@ -242,10 +257,10 @@ $ ->
 
   move_up = () ->
     column_index = 1
-    while column_index <= 5
+    while column_index <= window.board_size
       firstEmpty = 1
       row_index = 1
-      while row_index <= 5
+      while row_index <= window.board_size
         currentDiv = get_tile(row_index, column_index)
         if currentDiv.length
           if currentDiv.data("row") > firstEmpty
@@ -257,9 +272,9 @@ $ ->
 
   move_down = () ->
     column_index = 1
-    while column_index <= 5
-      firstEmpty = 5
-      row_index = 5
+    while column_index <= window.board_size
+      firstEmpty = window.board_size
+      row_index = window.board_size
       while row_index >= 1
         currentDiv = get_tile(row_index, column_index)
         if currentDiv.length
