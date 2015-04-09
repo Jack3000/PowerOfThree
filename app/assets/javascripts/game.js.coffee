@@ -43,10 +43,7 @@ $ ->
     $('#game_container').append(div)
     $('.restarter').on('click', restart)
     $('#game_over').animate {'opacity': 1}, 1000
-    $.ajax
-      url: "/scores"
-      data: {score: {score: $('.score_value').text(), board_size: window.board_size}}
-      type: 'post'
+
 
   restart = () ->
     $('.tile').remove()
