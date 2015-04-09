@@ -1,8 +1,11 @@
 - @title = 6561
 
 %h2= @title
-#abovegame
-  %input{type: "button", value: "new game", class: "restarter"}
+#abovegame{ data: { size: board_size } }
+  .button_wrap
+    %input{type: "button", value: "new game", class: "restarter"}
+    .board_size
+      != select_tag('board_size_select', board_size_options)
   #highscore
     highscore
     .highscore_value
@@ -12,7 +15,7 @@
     .score_value
       0
 
-#game_container
+#game_container{ class: "size_#{board_size}" }
   #board{ data: {size: board_size} }
     - build_game_board
   #tiles

@@ -4,15 +4,12 @@ $ ->
     $('.restarter').on('click', restart)
     create_new_div()
 
-  window.board_size = 6
+  window.board_size = $('#board').data('size')
   window.gameOver = false
 
-  restart = () ->
-    $('.tile').remove()
-    $('.score_value').text(0)
-    $('#game_over').remove()
-    window.gameOver = false
-    create_new_div()
+  $('#board_size_select').on 'change', ->
+    size = $('#board_size_select option:selected').val()
+    window.location = '/?board_size=' + size
 
   arrow_handler = (key) ->
     return if [37,38,39,40].indexOf(key.keyCode) < 0
@@ -45,11 +42,18 @@ $ ->
     div = "<div id='game_over'>Game Over<input type='submit' class='restarter' value='restart?'></div>"
     $('#game_container').append(div)
     $('.restarter').on('click', restart)
+    $('#game_over').animate {'opacity': 1}, 1000
     # $.ajax
     #   url: my_url
     #   data: highscore
     #   type: 'post'
 
+  restart = () ->
+    $('.tile').remove()
+    $('.score_value').text(0)
+    $('#game_over').remove()
+    window.gameOver = false
+    create_new_div()
 
   create_new_div = ->
     power = if random_whole_number(4) == 2 then 2 else 1

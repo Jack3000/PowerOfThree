@@ -1,7 +1,5 @@
 @import "common"
 
-$board_size: 6
-
 body
   width: 800px
   margin: 2.5% auto 0
@@ -18,11 +16,13 @@ h2
   text-align: center
   padding: 25px
 
-.restarter
+.button_wrap
   display: inline-block
-  margin: 15px
-  height: 30px
-  width: 150px
+
+  .restarter, #board_size_select
+    margin: 15px
+    height: 30px
+    width: 150px
 
 #score, #highscore
   float: right
@@ -30,78 +30,78 @@ h2
   height: 30px
   width: 150px
 
-
-#game_container
-  position: relative
-  width: $board_size * 120px
-  height: $board_size * 120px
-  max-width: 720px
-  max-height: 720px
-  margin: 5px auto 0
-  border: 3px #000000 solid
-  font-size: 0
-
-  #board
-    position: absolute
-    left: 50%
-    margin-left: -50%
-    width: 100%
-    height: 100%
-    background-color: #c0c0c0
-
-    .board_row
-      width: 100%
-      height: percentage(5 / 6 / $board_size)
-      display: inline-block
-
-      .board_cell
-        background-color: #909090
-        margin: 0 percentage(1 / 12 / $board_size) 0
-        float: left
-        height: 100%
-        width: percentage(5 / 6 / $board_size)
-
-    .afirst_row
-      margin: percentage(1 / 12 / $board_size) 0 0
-
-  .tile
+@for $board_size from 1 through 12
+  #game_container.size_#{$board_size}
     position: relative
-    height: percentage(5 / 6 / $board_size)
-    width: percentage(5 / 6 / $board_size)
+    width: $board_size * 120px
+    height: $board_size * 120px
+    max-width: 720px
+    max-height: 720px
+    margin: 5px auto 0
+    border: 3px #000000 solid
+    font-size: 0
 
-    .tile_value
+    #board
+      z-index: 1
       position: absolute
+      left: 50%
+      margin-left: -50%
       width: 100%
-      font-size: 25px
-      top: 37.5%
+      height: 100%
+      background-color: #c0c0c0
+
+      .board_row
+        width: 100%
+        height: percentage(5 / 6 / $board_size)
+        display: inline-block
+
+        .board_cell
+          background-color: #909090
+          margin: 0 percentage(1 / 12 / $board_size) 0
+          float: left
+          height: 100%
+          width: percentage(5 / 6 / $board_size)
+
+    .tile
+      z-index: 2
+      position: relative
+      height: percentage(5 / 6 / $board_size)
+      width: percentage(5 / 6 / $board_size)
+
+      .tile_value
+        position: absolute
+        width: 100%
+        font-size: 25px
+        top: 37.5%
+        text-align: center
+
+    #game_over
+      z-index: 3
+      position: relative
+      width: 70%
+      height: 70%
+      padding: 15%
+      background-color: rgba(128, 128, 128, 0.75)
+      font-size: 50px
       text-align: center
+      opacity: 0
 
-  #game_over
-    z-index: 1
-    width: 70%
-    height: 70%
-    padding: 15%
-    background-color: #888
-    opacity: 0.75
-    font-size: 50px
-    text-align: center
-
-    .restarter
-      display: block
-      margin: 25% auto
+      .restarter
+        display: block
+        margin: 25% auto
 
 
-  @for $i from 1 through $board_size
-    .row#{$i}
-      position: absolute
-      top: percentage((1 / 12 + $i - 1) / $board_size)
-      @include move-tile()
+    @for $j from 1 through 12
+      .row#{$j}
+        position: absolute
+        top: percentage((1 / 12 + $j - 1) / $board_size)
+        @include move-tile()
 
-  @for $i from 1 through $board_size
-    .column#{$i}
-      position: absolute
-      left: percentage((1 / 12 + $i - 1) / $board_size)
-      @include move-tile()
+    @for $j from 1 through $board_size
+      .column#{$j}
+        position: absolute
+        left: percentage((1 / 12 + $j - 1) / $board_size)
+        @include move-tile()
 
   .power1
     background-color: #ff8
