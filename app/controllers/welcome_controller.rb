@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
 
-	def index
-		render 'index'
-	end
+  def index
+    render 'index'
+  end
 end
