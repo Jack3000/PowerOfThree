@@ -16,24 +16,14 @@ $ ->
     return false if window.gameOver
     window.tookAction = false
     window.checkMove = false
-    if key.keyCode == 37
-      conjoin_left()
-      move_left()
-    if key.keyCode == 38
-      conjoin_up()
-      move_up()
-    if key.keyCode == 39
-      conjoin_right()
-      move_right()
-    if key.keyCode == 40
-      conjoin_down()
-      move_down()
+    conjoin(key.keyCode)
+    move(key.keyCode)
     create_new_div() if window.tookAction
     if window.list.length == 1
       window.noMove = true
       window.checkMove = true
-      conjoin_left()
-      conjoin_up()
+      conjoin(37)
+      conjoin(38)
       gameOver() if window.noMove
     false
 
@@ -112,183 +102,84 @@ $ ->
     $('.highscore_value').text(i) if i > j
 
 
-  conjoin_left = () ->
-    row_index = 1
-    while row_index <= window.board_size
-      first_column_index = 1
-      while first_column_index <= window.board_size - 2
-        a = $('.row' + row_index + '.column' + first_column_index)
+  conjoin = (keyCode) ->
+    if keyCode == 37 || keyCode == 39
+      general_axis = 'row' 
+      div_axis = 'column'
+    else
+      general_axis = 'column'
+      div_axis = 'row'
+    if keyCode == 37 || keyCode == 38
+      first_index = 1
+      last_index = window.board_size
+    else
+      first_index = (0 - window.board_size)
+      last_index = -1
+    axis_index = first_index
+    while axis_index <= last_index
+      first_div_index = first_index
+      while first_div_index <= last_index - 2
+        a = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(first_div_index))
         if a.length
-          second_column_index = first_column_index + 1
-          while second_column_index <= window.board_size - 1
-            b = $('.row' + row_index + '.column' + second_column_index)
+          second_div_index = first_div_index + 1
+          while second_div_index <= last_index - 1
+            b = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(second_div_index))
             if b.length
               if a.data("power") == b.data("power")
-                third_column_index = second_column_index + 1
-                while third_column_index <= window.board_size
-                  c = $('.row' + row_index + '.column' + third_column_index)
+                third_div_index = second_div_index + 1
+                while third_div_index <= last_index
+                  c = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(third_div_index))
                   if c.length
                     if c.data("power") == b.data("power")
                       if window.checkMove
                         window.noMove = false
                       else
                         joining(a, b, c)
-                        first_column_index = third_column_index
-                        second_column_index = window.board_size
-                        third_column_index = window.board_size + 1
-                    third_column_index = window.board_size + 1
-                  third_column_index++
-              second_column_index = window.board_size
-            second_column_index++
-        first_column_index++
-      row_index++
+                        first_div_index = third_div_index
+                        second_div_index = last_index
+                        third_div_index = last_index + 1
+                    third_div_index = last_index + 1
+                  third_div_index++
+              second_div_index = last_index
+            second_div_index++
+        first_div_index++
+      axis_index++
 
-  conjoin_right = () ->
-    row_index = window.board_size
-    while row_index >= 1
-      first_column_index = window.board_size
-      while first_column_index >= 3
-        a = $('.row' + row_index + '.column' + first_column_index)
-        if a.length
-          second_column_index = first_column_index - 1
-          while second_column_index >= 2
-            b = $('.row' + row_index + '.column' + second_column_index)
-            if b.length
-              if a.data("power") == b.data("power")
-                third_column_index = second_column_index - 1
-                while third_column_index >= 1
-                  c = $('.row' + row_index + '.column' + third_column_index)
-                  if c.length
-                    if c.data("power") == b.data("power")
-                      joining(a, b, c)
-                      first_column_index = third_column_index
-                      second_column_index = 1
-                      third_column_index = 0
-                    third_column_index = 0
-                  third_column_index--
-              second_column_index = 1
-            second_column_index--
-        first_column_index--
-      row_index--
-
-  conjoin_up = () ->
-    column_index = 1
-    while column_index <= window.board_size
-      first_row_index = 1
-      while first_row_index <= window.board_size - 2
-        a = $('.column' + column_index + '.row' + first_row_index)
-        if a.length
-          second_row_index = first_row_index + 1
-          while second_row_index <= window.board_size - 1
-            b = $('.column' + column_index + '.row' + second_row_index)
-            if b.length
-              if a.data("power") == b.data("power")
-                third_row_index = second_row_index + 1
-                while third_row_index <= window.board_size
-                  c = $('.column' + column_index + '.row' + third_row_index)
-                  if c.length
-                    if c.data("power") == b.data("power")
-                      if window.checkMove
-                        window.noMove = false
-                      else
-                        joining(a, b, c)
-                        first_row_index = third_row_index
-                        second_row_index = window.board_size
-                        third_row_index = window.board_size + 1
-                    third_row_index = window.board_size + 1
-                  third_row_index++
-              second_row_index = window.board_size
-            second_row_index++
-        first_row_index++
-      column_index++
-
-  conjoin_down = () ->
-    column_index = window.board_size
-    while column_index >= 1
-      first_row_index = window.board_size
-      while first_row_index >= 3
-        a = $('.column' + column_index + '.row' + first_row_index)
-        if a.length
-          second_row_index = first_row_index - 1
-          while second_row_index >= 2
-            b = $('.column' + column_index + '.row' + second_row_index)
-            if b.length
-              if a.data("power") == b.data("power")
-                third_row_index = second_row_index - 1
-                while third_row_index >= 1
-                  c = $('.column' + column_index + '.row' + third_row_index)
-                  if c.length
-                    if c.data("power") == b.data("power")
-                      joining(a, b, c)
-                      first_row_index = third_row_index
-                      second_row_index = 1
-                      third_row_index = 0
-                    third_row_index = 0
-                  third_row_index--
-              second_row_index = 1
-            second_row_index--
-        first_row_index--
-      column_index--
-
-  move_left = () ->
-    row_index = 1
-    while row_index <= window.board_size
-      firstEmpty = 1
-      column_index = 1
-      while column_index <= window.board_size
-        currentDiv = get_tile(row_index, column_index)
+  move = (keyCode) ->
+    if (keyCode == 37) || (keyCode == 39)
+      axis = "column"
+    else
+      axis = "row"
+    if (keyCode == 37) || (keyCode == 38)
+      general_axis_index = 1
+      first_index = 1
+      last_index = window.board_size
+    else
+      general_axis_index = (0 - window.board_size)
+      first_index = (0 - window.board_size)
+      last_index = -1
+    while general_axis_index <= last_index
+      axis_index = first_index
+      firstEmpty = first_index
+      while axis_index <= last_index
+        currentDiv = get_tile(Math.abs(general_axis_index), Math.abs(axis_index), axis)
         if currentDiv.length
-          if currentDiv.data("column") > firstEmpty
-            move_tile(currentDiv, firstEmpty, 'column')
-          firstEmpty++
-        column_index++
-      row_index++
+          if (keyCode == 37) || (keyCode == 38)
+            if currentDiv.data(axis) > Math.abs(firstEmpty)
+              move_tile(currentDiv, Math.abs(firstEmpty), axis)
+            firstEmpty++
+          else
+            if currentDiv.data(axis) < Math.abs(firstEmpty)
+              move_tile(currentDiv, Math.abs(firstEmpty), axis)
+            firstEmpty++
+        axis_index++
+      general_axis_index++
 
-  move_right = () ->
-    row_index = 1
-    while row_index <= window.board_size
-      firstEmpty = window.board_size
-      column_index = window.board_size
-      while column_index >= 1
-        currentDiv = get_tile(row_index, column_index)
-        if currentDiv.length
-          if currentDiv.data("column") < firstEmpty
-            move_tile(currentDiv, firstEmpty, 'column')
-          firstEmpty--
-        column_index--
-      row_index++
-
-  move_up = () ->
-    column_index = 1
-    while column_index <= window.board_size
-      firstEmpty = 1
-      row_index = 1
-      while row_index <= window.board_size
-        currentDiv = get_tile(row_index, column_index)
-        if currentDiv.length
-          if currentDiv.data("row") > firstEmpty
-            move_tile(currentDiv, firstEmpty, 'row')
-          firstEmpty++
-        row_index++
-      column_index++
-
-
-  move_down = () ->
-    column_index = 1
-    while column_index <= window.board_size
-      firstEmpty = window.board_size
-      row_index = window.board_size
-      while row_index >= 1
-        currentDiv = get_tile(row_index, column_index)
-        if currentDiv.length
-          if currentDiv.data("row") < firstEmpty
-            move_tile(currentDiv, firstEmpty, 'row')
-          firstEmpty--
-        row_index--
-      column_index++
-
-  get_tile = (row_index, column_index) ->
-    $('.column' + column_index + '.row' + row_index)
+  get_tile = (general_axis_index, axis_index, axis) ->
+    if axis == 'row'
+      $('.row' + axis_index + '.column' + general_axis_index)
+    else
+      $('.column' + axis_index + '.row' + general_axis_index)
 
   move_tile = (tile, firstEmpty, row_or_column) ->
     $(tile).removeClass(row_or_column + (tile.data(row_or_column))).addClass(row_or_column + firstEmpty)

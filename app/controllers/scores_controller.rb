@@ -1,4 +1,5 @@
 class ScoresController < ApplicationController
+	after_action :score_limiter, only: :create
 
   def create
     Score.create!(score_params)
@@ -7,5 +8,11 @@ class ScoresController < ApplicationController
 
   def score_params
     params.require(:score).permit(:user_id, :score, :board_size)
+  end
+
+  def score_limiter
+  	score = Score.order("created_at DESC").limit(1).first
+  	scores = Score.where(user_id: (score.user_id), board_size: (score.board_size))
+  	scores.order("score ASC").limit(1).first.destroy if scores.length > 25
   end
 end
