@@ -9,8 +9,8 @@ $ ->
 
   $('#board_size_select').on 'change', ->
     size = $('#board_size_select option:selected').val()
-    window.location = '/?board_size=' + size
-
+    window.location = window.location.toString().slice(0, window.location.toString().indexOf("?")) + '?board_size=' + size
+    
   arrow_handler = (key) ->
     return if [37,38,39,40].indexOf(key.keyCode) < 0
     return false if window.gameOver
@@ -40,6 +40,8 @@ $ ->
 
   restart = () ->
     $('.tile').remove()
+    i = parseInt($('.score_value').text())
+    $('.highscore_value').text(i) if i > parseInt($('.highscore_value').text())
     $('.score_value').text(0)
     $('#game_over').remove()
     window.gameOver = false
@@ -98,8 +100,6 @@ $ ->
     $(b).children().text(Math.pow(3, b.data("power")))
     i = parseInt($('.score_value').text()) + Math.pow(3, b.data("power"))
     $('.score_value').text(i)
-    j = parseInt($('.highscore_value').text())
-    $('.highscore_value').text(i) if i > j
 
 
   conjoin = (keyCode) ->

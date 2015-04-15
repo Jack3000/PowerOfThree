@@ -6,14 +6,16 @@
     %input{type: "button", value: "new game", class: "restarter"}
     .board_size
       != select_tag('board_size_select', board_size_options)
-  #highscore
-    highscore
-    .highscore_value
-      != Score.top_score(board_size)
-  #score
-    score
-    .score_value
-      0
+  .score_wrap
+    #highscore
+      Highscore
+      .highscore_value
+        != Score.top_score(board_size)
+    #score
+      Score
+      .score_value
+        0
+  = link_to "Check highscores", "/scores?board_size=#{params[:board_size]}"
 
 #game_container{ class: "size_#{board_size}" }
   #board{ data: {size: board_size} }

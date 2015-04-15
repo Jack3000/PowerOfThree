@@ -1,34 +1,71 @@
 @import "common"
 
 body
+  font-size: 20px
   width: 800px
-  margin: 2.5% auto 0
-  background-color: #808080
+  margin: 0 auto
+  background-color: #1A1B31
 
 .bottom_of_body
   height: 50px
-  background-color: #b0b0b0
 
 #main
-  background-color: #b0b0b0
+  background-color: #C6C2D3
 
-h2
+h2, h3
+  font-size: 250%
   text-align: center
-  padding: 25px
-
-.button_wrap
-  display: inline-block
+  padding-top: 25px
 
 .restarter, #board_size_select
-  margin: 15px
+  margin: 15px 0
   height: 30px
   width: 150px
 
-#score, #highscore
-  float: right
+#abovegame
+  position: relative
+  .button_wrap
+    margin: 30px
+    display: inline-block
+  .score_wrap
+    display: inline-block
+    position: absolute
+    right: 15px
+    bottom: 15px
+    #score, #highscore
+      float: right
+      margin: 15px
+      height: 60px
+      width: 180px
+      font-size: 24px
+      background-color: #9e9aab
+      text-align: center
+      padding: 4px
+      border-radius: 5px
+      .highscore_value, .score_value
+        font-size: 18px
+        padding: 6px
+
+#highscores_table
+  position: relative
+  width: 50%
+  margin: auto
+  padding-bottom: 50px
+  table
+    width: 100%
+    border-collapse: collapse
+    th, td
+      border: 1px black solid
+      font-size: 16px
+      margin: 0
+      height: 20px
+      padding: 2px 4px
+      text-align: left
+
+a
+  position: absolute
+  right: 15px
   margin: 15px
-  height: 30px
-  width: 150px
 
 @for $board_size from 1 through 12
   #game_container.size_#{$board_size}
@@ -48,7 +85,7 @@ h2
       margin-left: -50%
       width: 100%
       height: 100%
-      background-color: #c0c0c0
+      background-color: #b0b6bc
 
       .board_row
         width: 100%
@@ -56,23 +93,28 @@ h2
         display: inline-block
 
         .board_cell
-          background-color: #909090
+          background-color: #80868c
           margin: 0 percentage(1 / 12 / $board_size) 0
           float: left
           height: 100%
           width: percentage(5 / 6 / $board_size)
+          border-radius: 4px
 
     .tile
       z-index: 2
       position: relative
       height: percentage(5 / 6 / $board_size)
       width: percentage(5 / 6 / $board_size)
+      border-radius: 4px
 
       .tile_value
         position: absolute
         width: 100%
-        font-size: 25px
-        top: 37.5%
+        @if $board_size <= 6
+          font-size: 33px
+        @else
+          font-size: 720px * (5 / 18 / $board_size)
+        top: 33%
         text-align: center
 
     #game_over
@@ -91,7 +133,7 @@ h2
         margin: 25% auto
 
 
-    @for $j from 1 through 12
+    @for $j from 1 through $board_size
       .row#{$j}
         position: absolute
         top: percentage((1 / 12 + $j - 1) / $board_size)
@@ -103,50 +145,36 @@ h2
         left: percentage((1 / 12 + $j - 1) / $board_size)
         @include move-tile()
 
-  .power1
-    background-color: #ff8
+.power1
+  background-color: #ff8
 
-  .power2
-    background-color: #ff0
+.power2
+  background-color: #ff0
 
-  .power3
-    background-color: #f80
+.power3
+  background-color: #fa0
 
-  .power4
-    background-color: #f00
+.power4
+  background-color: #f30
 
-  .power5
-    background-color: #d0d
+.power5
+  background-color: #d2d
 
-  .power6
-    background-color: #08f
+.power6
+  background-color: #26f
 
-  .power7
-    background-color: #999
+.power7
+  background-color: #4a6
 
-  .power8
-    background-color: #888
+.power8
+  background-color: #555
+  color: white
 
-  .power9
-    background-color: #777
+.power9
+  background-color: #333
+  color: white
 
-  .power10
-    background-color: #666
-
-  .power11
-    background-color: #555
-
-  .power12
-    background-color: #444
-
-  .power13
-    background-color: #333
-
-  .power14
-    background-color: #222
-
-  .power15
-    background-color: #111
-
-  .power16
+@for $p from 10 through 20 
+  .power#{$p}
     background-color: #000
+    color: white

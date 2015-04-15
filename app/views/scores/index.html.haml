@@ -1,0 +1,25 @@
+- @title = "6561 - Highscores"
+
+%h2
+	Highscores
+%h3
+	Your Highscores
+#highscores_table
+	!= select_tag('board_size_select', board_size_options)
+	= link_to "Back to game", "/"
+	%table
+		%tr
+			%th User
+			%th Board Size
+			%th Score
+		- @scores.each do |score|
+			%tr
+				%td= score.user_id == nil ? "Anonymous" : score.user_id
+				%td= score.board_size
+				%td= score.score
+		- z = Array.new(25 - @scores.length)
+		- z.each do |x|
+			%tr
+				%td= params[:user_id] == nil ? "Anonymous" : params[:user_id]
+				%td= board_size
+				%td= 0

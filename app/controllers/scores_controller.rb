@@ -1,6 +1,12 @@
 class ScoresController < ApplicationController
 	after_action :score_limiter, only: :create
 
+  def index
+    size = params[:board_size].to_i
+    size.in?(1..12) ? b_size = size : b_size = 6
+    @scores = Score.where(user_id: params[:user_id], board_size: b_size).order("score DESC")
+  end
+
   def create
     Score.create!(score_params)
     render nothing: true
