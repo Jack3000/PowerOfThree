@@ -4,7 +4,17 @@ class ScoresController < ApplicationController
   def index
     size = params[:board_size].to_i
     size.in?(1..12) ? b_size = size : b_size = 6
-    @scores = Score.where(user_id: params[:user_id], board_size: b_size).order("score DESC")
+    if current_user == nil
+      @scores = Score.where(user_id: nil, board_size: b_size).order("score DESC")
+    else
+      @scores = Score.where(user_id: current_user.id, board_size: b_size).order("score DESC")
+    end
+  end
+
+  def all
+    size = params[:board_size].to_i
+    size.in?(1..12) ? b_size = size : b_size = 6
+    @scores = Score.where(board_size: b_size).order("score DESC")
   end
 
   def create

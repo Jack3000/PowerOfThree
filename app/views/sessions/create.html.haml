@@ -1,0 +1,10 @@
+%div{:style=>"text-align: center;"}
+	%h2
+		Success!
+	%h4
+		= "Welcome aboard, #{current_user.name}."
+	%div
+		= link_to "To the game", "/", {:style=>"position: static; margin-bottom: 50px;"}
+	- if current_user
+		%div
+			= "#{current_user.name} is logged in."

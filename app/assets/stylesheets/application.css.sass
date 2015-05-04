@@ -2,20 +2,41 @@
 
 body
   font-size: 20px
-  width: 800px
+  width: 860px
   margin: 0 auto
-  background-color: #1A1B31
+  background-color: #181f26
+  
+  #borderer
+    background-color: #6f717e
+    padding: 30px
 
-.bottom_of_body
-  height: 50px
+  #main
+    background-color: #C6C2D3
+    padding-bottom: 50px
+    border-radius: 5px
+    border: solid #C6C2D3 1px
+    position: relative
 
-#main
-  background-color: #C6C2D3
+.log_box
+  position: absolute
+  right: 15px
+  top: 15px
+  min-width: 150px
+  font-size: 14px
+
+  .login_form
+    border: solid black 3px
+    padding: 5px
+    background-color: #F0EBFF
+    width: 200px
 
 h2, h3
   font-size: 250%
   text-align: center
   padding-top: 25px
+
+h2
+  margin-bottom: 80px
 
 .restarter, #board_size_select
   margin: 15px 0
@@ -62,10 +83,29 @@ h2, h3
       padding: 2px 4px
       text-align: left
 
-a
+#highscore_link
   position: absolute
   right: 15px
   margin: 15px
+
+.error
+  display: table
+  padding: 5px
+  margin-bottom: 5px
+  background-color: rgba(255, 0, 0, 0.5)
+  border: solid red 3px
+
+.success
+  padding: 5px
+
+.field_with_error
+  display: inline-block
+
+label
+  display: block
+
+input
+  display: block
 
 @for $board_size from 1 through 12
   #game_container.size_#{$board_size}

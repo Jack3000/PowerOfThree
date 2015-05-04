@@ -5,7 +5,13 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  resources :scores
+  resources :scores do
+    collection do
+      get 'all'
+    end
+  end
+  resources :users
+  resources :sessions, only: [:new, :create, :destroy]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

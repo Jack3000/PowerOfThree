@@ -2,16 +2,12 @@
 
 %h2
 	Highscores
-- if current_user == nil
-	%h3
-		Anonymous Highscores
-- else
-	%h3
-		Your Highscores
+%h3
+	All Highscores
 #highscores_table
 	= select_tag('board_size_select', board_size_options)
 	= link_to "Back to game", "/", {:style => "position: absolute; right: 5px; top: 25px;"}
-	= link_to "View all highscores", all_scores_path( board_size: params[:board_size] ), {:style => "position: absolute; right: 5px; top: 0px;" }
+	= link_to "View your highscores", scores_path( board_size: params[:board_size] ), {:style => "position: absolute; right: 5px; top: 0px;" }
 	%table
 		%tr
 			%th User

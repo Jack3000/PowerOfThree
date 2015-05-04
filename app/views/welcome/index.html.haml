@@ -15,11 +15,9 @@
       Score
       .score_value
         0
-  = link_to "Check highscores", "/scores?board_size=#{params[:board_size]}"
+  = link_to "Check highscores", "/scores?board_size=#{params[:board_size]}", :id => "highscore_link"
 
 #game_container{ class: "size_#{board_size}" }
   #board{ data: {size: board_size} }
     - build_game_board
   #tiles
-
-.bottom_of_body

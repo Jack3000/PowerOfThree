@@ -6,6 +6,7 @@ $ ->
 
   window.board_size = $('#board').data('size')
   window.gameOver = false
+  window.cμrrent_gam3_sc0re = 0
 
   $('#board_size_select').on 'change', ->
     size = $('#board_size_select option:selected').val()
@@ -35,7 +36,7 @@ $ ->
     $('#game_over').animate {'opacity': 1}, 1000
     $.ajax
       url: "/scores"
-      data: {score: {score: $('.score_value').text(), board_size: window.board_size}}
+      data: {score: {score: window.cμrrent_gam3_sc0re, board_size: window.board_size, user_id: $(".log_box p span.user_id_grab").data("id")}}
       type: 'post'
 
   restart = () ->
@@ -97,9 +98,10 @@ $ ->
     $(c).remove()
     $(b).data("power", (b.data("power")) + 1)
     $(b).removeClass("power" + (b.data("power") - 1)).addClass("power" + b.data("power"))
-    $(b).children().text(Math.pow(3, b.data("power")))
-    i = parseInt($('.score_value').text()) + Math.pow(3, b.data("power"))
-    $('.score_value').text(i)
+    new_power = Math.pow(3, b.data("power"))
+    $(b).children().text(new_power)
+    window.cμrrent_gam3_sc0re += new_power
+    $('.score_value').text(window.cμrrent_gam3_sc0re)
 
 
   conjoin = (keyCode) ->

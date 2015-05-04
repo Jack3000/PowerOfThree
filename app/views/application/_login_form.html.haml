@@ -1,0 +1,12 @@
+.login_form
+  != form_for :session, url: sessions_path do |f|
+    - flash.each do |key, value|
+      %div{:class => "flash #{key}"}= value
+    != f.label :name_or_email
+    != f.text_field :name_or_email
+    != f.label :password
+    != f.password_field :password
+    != f.submit "Login"
+%p
+  Not a member?
+  = link_to "Create an account!", new_user_path
