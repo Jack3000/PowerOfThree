@@ -1,0 +1,19 @@
+%div
+	.instruct_box
+		%a{ href: "#" }
+			Close
+		%h4
+			How to Play
+		%p
+			Welcome to "6561". The game plays very similar to the game "2048", only you have to combine three-of-a-kind instead of two. If you haven't played that game either, here's a quick rundown of how it works:
+		%p
+			= image_tag 'arrow_keys.jpg', style: "float: right; margin: 0 0 10px 10px;"
+			You start off with a single tile on the board. You can use the arrow keys (seen right) to move it across the board. Pressing an arrow key will send all the tiles on the screen as far as they can go in that direction, until they either hit the edge of the board or another tile. After each move you make a new tile will appear randomly.
+		%p
+			You'll notice every tile has a number within it. If three tiles of the same value are in a row, attempting to move them against each other will cause them to collapse into one tile with the combined value of all three. Thus, if three tiles of 3 are sitting horizontal to one another with no other tiles in between, pressing either left ( <- ) or right ( -> ) will result in a single tile of 9. Three 9's make 27, three 27's 81, and so on. Whenever you combine three tiles your score goes up by the value of the new tile.
+		%p
+			Your goal therefore is simple: to keep combining tiles into greater and greater numbers and increase your score as much as you can before you run out of moves to make.
+		%p
+			Also note that the default board size is 6x6, but if you desire a quicker game, or perhaps a legthier one, you can change the size of the board by using the select box just above the left hand side of the board.
+		%p
+			Enjoy!

@@ -2,6 +2,9 @@
 
 %h2= @title
 #abovegame{ data: { size: board_size } }
+  .instructions{ style: "position: absolute; left: 30px;" }
+    %a{ href: "#" }
+      How to play.
   .button_wrap
     %input{type: "button", value: "new game", class: "restarter"}
     .board_size
@@ -21,3 +24,6 @@
   #board{ data: {size: board_size} }
     - build_game_board
   #tiles
+
+#how_to_play{ style: "display: none; height: 100%; width: 100%;" }
+  != render partial: 'instructions'

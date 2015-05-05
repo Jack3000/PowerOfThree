@@ -5,16 +5,16 @@ class ScoresController < ApplicationController
     size = params[:board_size].to_i
     size.in?(1..12) ? b_size = size : b_size = 6
     if current_user == nil
-      @scores = Score.where(user_id: nil, board_size: b_size).order("score DESC")
+      @scores = Score.where(user_id: nil, board_size: b_size).order("score DESC").limit(25)
     else
-      @scores = Score.where(user_id: current_user.id, board_size: b_size).order("score DESC")
+      @scores = Score.where(user_id: current_user.id, board_size: b_size).order("score DESC").limit(25)
     end
   end
 
   def all
     size = params[:board_size].to_i
     size.in?(1..12) ? b_size = size : b_size = 6
-    @scores = Score.where(board_size: b_size).order("score DESC")
+    @scores = Score.where(board_size: b_size).order("score DESC").limit(25)
   end
 
   def create

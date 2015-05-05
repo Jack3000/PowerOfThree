@@ -2,6 +2,8 @@ $ ->
   $( document ).ready ->
     $('body').keydown(arrow_handler)
     $('.restarter').on('click', restart)
+    $('.instructions a').on 'click', show_instructions
+    $('#how_to_play a').on 'click', hide_instructions
     create_new_div()
 
   window.board_size = $('#board').data('size')
@@ -48,6 +50,16 @@ $ ->
     $('#game_over').remove()
     window.gameOver = false
     create_new_div()
+
+  show_instructions = () ->
+    $('#how_to_play').fadeIn()
+    $('body').css('overflow','hidden');
+    $('body').off('keydown', arrow_handler) 
+
+  hide_instructions = () ->
+    $('#how_to_play').fadeOut()
+    $('body').css('overflow','scroll');
+    $('body').on('keydown', arrow_handler) 
 
   create_new_div = ->
     power = if random_whole_number(4) == 2 then 2 else 1
