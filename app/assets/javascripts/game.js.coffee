@@ -40,6 +40,7 @@ $ ->
       type: 'post'
 
   restart = () ->
+    window.cμrrent_gam3_sc0re = 0
     $('.tile').remove()
     i = parseInt($('.score_value').text())
     $('.highscore_value').text(i) if i > parseInt($('.highscore_value').text())
