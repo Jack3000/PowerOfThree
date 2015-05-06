@@ -27,8 +27,10 @@ class ScoresController < ApplicationController
   end
 
   def destroy
+    byebug
     Score.where("board_size = ? and score = ?", params[:board_size], params[:score]).first.destroy
     flash.now[:success] = "Score removed."
+  end
 
   def score_limiter
   	score = Score.order("created_at DESC").limit(1).first
