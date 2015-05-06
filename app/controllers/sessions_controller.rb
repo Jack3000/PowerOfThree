@@ -1,8 +1,8 @@
 class SessionsController < ApplicationController
 
   def create
-    user = User.find_by_name(params[:session][:name_or_email])
-    user = User.find_by_email(params[:session][:name_or_email]) if user == nil
+    user = User.where("lower(name) = ?", params[:session][:name_or_email].downcase).first
+    user = User.where("lower(email) = ?", params[:session][:name_or_email].downcase).first if user == nil
     if user
       pass_checks = user.password_check(params[:session][:password])
     end

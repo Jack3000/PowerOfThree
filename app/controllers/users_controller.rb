@@ -5,13 +5,7 @@ class UsersController < ApplicationController
 		render 'login'
 	end
 
-	def show # temporary so I can look at the 'create' page without creating new user.
-		@user = User.first
-		render 'create'
-	end
-
 	def create
-		byebug
 		@user = User.new(user_params)
 		if @user.save
 			log_in(@user)

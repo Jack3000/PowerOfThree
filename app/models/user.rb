@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
 
 	validates :name, :email, :password, :password_confirmation, presence: true
 	validates :password, confirmation: true
-	validates :name, :email, uniqueness: true
+	validates :name, :email, uniqueness: { case_sensitive: false }
 	validate :email_is_valid
 
 	def email_is_valid

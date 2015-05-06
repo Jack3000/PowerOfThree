@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+  get '/instructions' => 'welcome#instructions'
 
   resources :scores do
     collection do

@@ -1,9 +1,8 @@
 $ ->
   $( document ).ready ->
     $('body').keydown(arrow_handler)
-    $('.restarter').on('click', restart)
+    $('.restarter').on 'click', restart
     $('.instructions a').on 'click', show_instructions
-    $('#how_to_play a').on 'click', hide_instructions
     create_new_div()
 
   window.board_size = $('#board').data('size')
@@ -52,12 +51,16 @@ $ ->
     create_new_div()
 
   show_instructions = () ->
-    $('#how_to_play').fadeIn()
+    $.ajax
+      url: "instructions"
+      success: (response) ->
+        $('#main').append(response).fadeIn()
+        $('#how_to_play a').on 'click', hide_instructions
     $('body').css('overflow','hidden');
     $('body').off('keydown', arrow_handler) 
 
   hide_instructions = () ->
-    $('#how_to_play').fadeOut()
+    $('#how_to_play').remove()
     $('body').css('overflow','scroll');
     $('body').on('keydown', arrow_handler) 
 
