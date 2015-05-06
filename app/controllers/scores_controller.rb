@@ -26,6 +26,10 @@ class ScoresController < ApplicationController
     params.require(:score).permit(:user_id, :score, :board_size)
   end
 
+  def destroy
+    Score.where("board_size = ? and score = ?", params[:board_size], params[:score]).first.destroy
+    flash.now[:success] = "Score removed."
+
   def score_limiter
   	score = Score.order("created_at DESC").limit(1).first
   	scores = Score.where(user_id: (score.user_id), board_size: (score.board_size))
