@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 	require 'digest'
 
-	has_many :scores
+	has_many :scores, dependent: :destroy
 
 	validates :name, :email, :password, :password_confirmation, presence: true
 	validates :password, confirmation: true
@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 	validate :email_is_valid
 
 	def email_is_valid
-		errors.add(:email, "is invalid") unless self.email =~ /.+\@.+\..+/
+		errors.add(:email, "is invalid") unless self.email =~ /\A\S+\@\S+\.\S+\z/
 	end
 
 	def password_check(submitted_password)

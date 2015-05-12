@@ -22,6 +22,15 @@ class ScoresController < ApplicationController
     render nothing: true
   end
 
+  def destroy_user_scores
+    @scores = Score.where(user_id: current_user.id)
+    @scores.each do |score|
+      score.destroy
+    end
+    flash[:notice] = "Your scores have been successfully deleted."
+    redirect_to user_path(current_user)
+  end
+
   def score_params
     params.require(:score).permit(:user_id, :score, :board_size)
   end

@@ -11,8 +11,18 @@ $ ->
 
   $('#board_size_select').on 'change', ->
     size = $('#board_size_select option:selected').val()
-    window.location = window.location.toString().slice(0, window.location.toString().indexOf("?")) + '?board_size=' + size
-    
+    param_index = window.location.toString().indexOf("?")
+    if param_index > -1
+      window.location = window.location.toString().slice(0, param_index) + '?board_size=' + size
+    else
+      window.location = window.location.toString() + '?board_size=' + size
+
+  $('.destroy_user').on 'click', (e) ->
+    confirmation_popup("user")
+
+  $('.destroy_scores').on 'click', (e) ->
+    confirmation_popup("scores")
+
   arrow_handler = (key) ->
     return if [37,38,39,40].indexOf(key.keyCode) < 0
     return false if window.gameOver
@@ -56,13 +66,37 @@ $ ->
       success: (response) ->
         $('#main').append(response).fadeIn()
         $('#how_to_play a').on 'click', hide_instructions
-    $('body').css('overflow','hidden');
+    $('body').css('overflow','hidden')
     $('body').off('keydown', arrow_handler) 
 
   hide_instructions = () ->
     $('#how_to_play').remove()
-    $('body').css('overflow','scroll');
+    $('body').css('overflow','scroll')
     $('body').on('keydown', arrow_handler) 
+
+  confirmation_popup = (destroy_target) ->
+    if destroy_target == "user"
+      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' wil terminate your account and erase all your highscores permenantly. Click no to abort"
+    else if destroy_target == "scores"
+      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' will permenantly erase all of your highscores. Click 'no' to abort."
+    $('body').css('overflow','hidden');
+    inner_div_style = "style='height: 150px; width: 430px; padding: 15px; background-color: rgb(167, 141, 112); border: double #aa4040 10px;position: fixed; top: 35%; left: 50%;margin: -75px -225px;z-index: 9999; line-height: 24px;'"
+    outer_div_style = "style='z-index: 9998; height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: rgba(80, 80, 80, 0.8);'"
+    button_style = "style='display: inline-block; height: 20px; width: 60px; margin-right: 20px;'"
+    buttons = "<input type='button' value='Yes' class='yes' #{button_style}><input type='button' value='No' class='no' #{button_style}>"
+    confirmation_div = "<div #{outer_div_style} class='confirmation_div'><div #{inner_div_style}>#{confirmation_message}<p style='position: absolute; bottom: 0;'>#{buttons}</p></div></div>"
+    $('body').append(confirmation_div)
+    if destroy_target == "user"
+      $('.confirmation_div .yes').on 'click', ->
+        $('.confirmation_div').append("<a data-method='delete' href='/users/#{$('h3').data("user_id")}' rel='nofollow'>a</a>")
+        $('.confirmation_div a').click()
+    else if destroy_target == "scores"
+      $('.confirmation_div .yes').on 'click', ->
+        $('.confirmation_div').append("<a data-method='delete' href='/scores/destroy_user_scores' rel='nofollow'>a</a>")
+        $('.confirmation_div a').click()
+    $('.confirmation_div .no').on 'click', ->
+      $('.confirmation_div').remove()
+      $('body').css('overflow','scroll')
 
   create_new_div = ->
     power = if random_whole_number(4) == 2 then 2 else 1
@@ -135,32 +169,32 @@ $ ->
       last_index = -1
     axis_index = first_index
     while axis_index <= last_index
-      first_div_index = first_index
-      while first_div_index <= last_index - 2
-        a = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(first_div_index))
+      div_1_index = first_index
+      while div_1_index <= last_index - 2
+        a = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(div_1_index))
         if a.length
-          second_div_index = first_div_index + 1
-          while second_div_index <= last_index - 1
-            b = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(second_div_index))
+          div_2_index = div_1_index + 1
+          while div_2_index <= last_index - 1
+            b = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(div_2_index))
             if b.length
               if a.data("power") == b.data("power")
-                third_div_index = second_div_index + 1
-                while third_div_index <= last_index
-                  c = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(third_div_index))
+                div_3_index = div_2_index + 1
+                while div_3_index <= last_index
+                  c = $('.' + general_axis + Math.abs(axis_index) + '.' + div_axis + Math.abs(div_3_index))
                   if c.length
                     if c.data("power") == b.data("power")
                       if window.checkMove
                         window.noMove = false
                       else
                         joining(a, b, c)
-                        first_div_index = third_div_index
-                        second_div_index = last_index
-                        third_div_index = last_index + 1
-                    third_div_index = last_index + 1
-                  third_div_index++
-              second_div_index = last_index
-            second_div_index++
-        first_div_index++
+                        div_1_index = div_3_index
+                        div_2_index = last_index
+                        div_3_index = last_index + 1
+                    div_3_index = last_index + 1
+                  div_3_index++
+              div_2_index = last_index
+            div_2_index++
+        div_1_index++
       axis_index++
 
   move = (keyCode) ->

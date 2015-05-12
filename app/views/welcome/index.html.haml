@@ -13,12 +13,15 @@
     #highscore
       Highscore
       .highscore_value
-        != Score.top_score(board_size)
+        - if current_user == nil
+          != Score.top_score(board_size, nil)
+        - else
+          != Score.top_score(board_size, current_user.id)
     #score
       Score
       .score_value
         0
-  = link_to "Check highscores", "/scores?board_size=#{params[:board_size]}", :id => "highscore_link"
+  = link_to "Check highscores", scores_path(board_size: params[:board_size]), id: "highscore_link"
 
 #game_container{ class: "size_#{board_size}" }
   #board{ data: {size: board_size} }

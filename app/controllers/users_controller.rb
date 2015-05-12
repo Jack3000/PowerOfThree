@@ -1,8 +1,15 @@
 class UsersController < ApplicationController
 	require 'digest'
+	before_action :set_user_and_name, only: :destroy
+	before_action :disable_log_box, only: [:show, :destroy]
 
 	def new
 		render 'login'
+	end
+
+	def show
+		@user = current_user
+		render 'show'
 	end
 
 	def create
@@ -13,6 +20,11 @@ class UsersController < ApplicationController
 		else
 			render 'login'
 		end
+	end
+
+	def destroy
+		@user.destroy
+		render 'deleted'
 	end
 
 	def user_params
@@ -29,5 +41,14 @@ class UsersController < ApplicationController
 			u_params[:salt] = salt
 		end
 		return u_params
+	end
+
+	def disable_log_box
+		@disable_log_box = true
+	end
+
+	def set_user_and_name
+		@user = current_user
+		@user_name = @user.name
 	end
 end

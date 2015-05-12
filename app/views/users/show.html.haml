@@ -1,0 +1,20 @@
+- @title = "Profile"
+
+- if current_user.name.downcase.end_with? "s"
+	%h3
+		= "#{current_user.name}' Profile"
+- else
+	%h3
+		= "#{current_user.name}'s Profile"
+%p
+	= notice
+%p
+	Your rank: *not yet implemented*
+%p
+	= link_to "Back to the game", root_path
+%p
+	= link_to "Your highscores", scores_path
+%p
+	= link_to "Terminate account", "#", class: "destroy_user"
+%p
+	= link_to "Clear all highscores", "#", class: "destroy_scores"

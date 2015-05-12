@@ -8,13 +8,5 @@
   %body
     #borderer
       #main
-        .log_box
-          - if current_user == nil
-            != render partial: 'login_form'
-          - else
-            %P<
-              Logged in as
-              %span{ class: "user_id_grab", data: { id: current_user.id }} #{current_user.name}
-              %span> .
-            = link_to 'Log out', session_path(session[:session_id]), :method => :delete
+        = render 'log_box' unless @disable_log_box
         = yield
