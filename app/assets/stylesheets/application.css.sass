@@ -56,7 +56,7 @@ a:visited
     position: absolute
     right: 15px
     bottom: 15px
-    #score, #highscore
+    #score, .highscore
       float: right
       margin: 15px
       height: 60px
@@ -66,9 +66,25 @@ a:visited
       text-align: center
       padding: 4px
       border-radius: 5px
+      p
+        display: none
+        font-size: 20px
+        position: absolute
+        top: -36px
+        right: 20px
+        width: 180px
       .highscore_value, .score_value
         font-size: 18px
         padding: 6px
+    #personal_highscore:after
+      content: "Click to show all users highscore."
+      font-size: 12px
+    #all_users_highscore:after
+      content: "Click to show personal highscore."
+      font-size: 12px
+    .highscore:hover
+      p
+        display: initial
 
 #highscores_table
   position: relative

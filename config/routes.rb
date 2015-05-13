@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :scores do
     collection do
       get 'all'
+      get 'top_score'
       delete 'destroy_user_scores', as: 'destroy'
     end
   end

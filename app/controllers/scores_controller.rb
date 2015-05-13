@@ -31,6 +31,17 @@ class ScoresController < ApplicationController
     redirect_to user_path(current_user)
   end
 
+  def top_score
+    if params[:user] == "all_users"
+      score = Score.top_score(params[:board_size], "all")
+    else
+      score = Score.top_score(params[:board_size], params[:user])
+    end
+    respond_to do |format|
+      format.json { render json: {score: score} }
+    end
+  end
+
   def score_params
     params.require(:score).permit(:user_id, :score, :board_size)
   end

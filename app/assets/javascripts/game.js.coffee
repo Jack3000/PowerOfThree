@@ -1,27 +1,32 @@
 $ ->
   $( document ).ready ->
+    window.board_size = $('#board').data('size')
+    window.gameOver = false
+    window.cμrrent_gam3_sc0re = 0
+
     $('body').keydown(arrow_handler)
     $('.restarter').on 'click', restart
     $('.instructions a').on 'click', show_instructions
-    create_new_div()
+    if window.location.pathname == "/"
+      create_new_div()
 
-  window.board_size = $('#board').data('size')
-  window.gameOver = false
-  window.cμrrent_gam3_sc0re = 0
+    $('#board_size_select').on 'change', ->
+      size = $('#board_size_select option:selected').val()
+      param_index = window.location.toString().indexOf("?")
+      if param_index > -1
+        window.location = window.location.toString().slice(0, param_index) + '?board_size=' + size
+      else
+        window.location = window.location.toString() + '?board_size=' + size
 
-  $('#board_size_select').on 'change', ->
-    size = $('#board_size_select option:selected').val()
-    param_index = window.location.toString().indexOf("?")
-    if param_index > -1
-      window.location = window.location.toString().slice(0, param_index) + '?board_size=' + size
-    else
-      window.location = window.location.toString() + '?board_size=' + size
-
-  $('.destroy_user').on 'click', (e) ->
-    confirmation_popup("user")
-
-  $('.destroy_scores').on 'click', (e) ->
-    confirmation_popup("scores")
+    $('.destroy_user').on 'click', () ->
+      confirmation_popup("user")
+  
+    $('.destroy_scores').on 'click', () ->
+      confirmation_popup("scores")
+  
+    $('#personal_highscore').on 'click', highscore_to_all_users
+  
+    $('#all_users_highscore').on 'click', highscore_to_personal
 
   arrow_handler = (key) ->
     return if [37,38,39,40].indexOf(key.keyCode) < 0
@@ -76,9 +81,9 @@ $ ->
 
   confirmation_popup = (destroy_target) ->
     if destroy_target == "user"
-      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' wil terminate your account and erase all your highscores permenantly. Click no to abort"
+      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' wil terminate your account and erase all your highscores permanently. Click 'no' to abort"
     else if destroy_target == "scores"
-      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' will permenantly erase all of your highscores. Click 'no' to abort."
+      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' will permanently erase all of your highscores. Click 'no' to abort."
     $('body').css('overflow','hidden');
     inner_div_style = "style='height: 150px; width: 430px; padding: 15px; background-color: rgb(167, 141, 112); border: double #aa4040 10px;position: fixed; top: 35%; left: 50%;margin: -75px -225px;z-index: 9999; line-height: 24px;'"
     outer_div_style = "style='z-index: 9998; height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: rgba(80, 80, 80, 0.8);'"
@@ -98,6 +103,28 @@ $ ->
       $('.confirmation_div').remove()
       $('body').css('overflow','scroll')
 
+  highscore_to_all_users = () ->
+    $(this).attr("id", "all_users_highscore")
+    $.ajax
+      url: '/scores/top_score'
+      data: { board_size: window.board_size, user: "all_users" }
+      success: (response) ->
+        $('.highscore_value').text(response["score"])
+        $('.highscore p').text("All users highscore")
+    $(this).off 'click'
+    $(this).on 'click', highscore_to_personal
+
+  highscore_to_personal = () ->
+    $(this).attr("id", "personal_highscore")
+    $.ajax
+      url: '/scores/top_score'
+      data: { board_size: window.board_size, user: $(".log_box p span.user_id_grab").data("id") }
+      success: (response) ->
+        $('.highscore_value').text(response["score"])
+        $('.highscore p').text("Your highscore")
+    $(this).off 'click'
+    $(this).on 'click', highscore_to_all_users
+
   create_new_div = ->
     power = if random_whole_number(4) == 2 then 2 else 1
     value = Math.pow(3, power)
@@ -113,7 +140,6 @@ $ ->
     while i <= window.board_size * window.board_size
       window.list.push i
       i++
-    existing_tiles = []
     $('.tile').each (index, el) ->
       delete window.list[-1 + matrix_index($(el).data())]
 

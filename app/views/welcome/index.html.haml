@@ -10,7 +10,9 @@
     .board_size
       != select_tag('board_size_select', board_size_options)
   .score_wrap
-    #highscore
+    .highscore#personal_highscore
+      %p
+        Your highscore
       Highscore
       .highscore_value
         - if current_user == nil
