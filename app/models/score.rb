@@ -17,9 +17,13 @@ class Score < ActiveRecord::Base
 				x = "not banana"
 				until x == "banana" do
 					top = Score.where(board_size: board_size).where.not(user_id: higher_scorers).order('score DESC').first
+					if higher_scorers.exclude?(nil)
+						alt_top = Score.where(board_size: board_size, user_id: nil).order("score DESC").first
+						top = alt_top if alt_top.score > top.score
+					end
 					if top.user_id == user
 						x = "banana"
-						ranks.push("You are the #{(higher_scorers.length + 1).ordinalize} highest scoring user on board size #{board_size}!")
+						ranks.push("You are the #{(higher_scorers.length + 1).ordinalize} highest scoring player on board size #{board_size}!")
 					else
 						higher_scorers.push(top.user_id)
 					end
