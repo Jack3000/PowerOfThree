@@ -81,7 +81,7 @@ $ ->
 
   confirmation_popup = (destroy_target) ->
     if destroy_target == "user"
-      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' wil terminate your account and erase all your highscores permanently. Click 'no' to abort"
+      confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' wil terminate your account and erase all your highscores permanently. Click 'no' to abort."
     else if destroy_target == "scores"
       confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' will permanently erase all of your highscores. Click 'no' to abort."
     $('body').css('overflow','hidden');
@@ -110,7 +110,8 @@ $ ->
       data: { board_size: window.board_size, user: "all_users" }
       success: (response) ->
         $('.highscore_value').text(response["score"])
-        $('.highscore p').text("All users highscore")
+        $('.highscore p#yours').removeClass("slider")
+        $('.highscore p#all_users').addClass("slider")
     $(this).off 'click'
     $(this).on 'click', highscore_to_personal
 
@@ -121,7 +122,8 @@ $ ->
       data: { board_size: window.board_size, user: $(".log_box p span.user_id_grab").data("id") }
       success: (response) ->
         $('.highscore_value').text(response["score"])
-        $('.highscore p').text("Your highscore")
+        $('.highscore p#all_users').removeClass("slider")
+        $('.highscore p#yours').addClass("slider")
     $(this).off 'click'
     $(this).on 'click', highscore_to_all_users
 

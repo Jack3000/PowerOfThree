@@ -6,15 +6,22 @@
 - else
 	%h3
 		= "#{current_user.name}'s Profile"
-%p
-	= notice
-%p
-	Your rank: *not yet implemented*
-%p
-	= link_to "Back to the game", root_path
-%p
-	= link_to "Your highscores", scores_path
-%p
-	= link_to "Terminate account", "#", class: "destroy_user"
-%p
-	= link_to "Clear all highscores", "#", class: "destroy_scores"
+.profile_box
+	%p
+		= notice
+	%div.ranker
+		%p
+			%b Your rankings:
+		- Score.get_rankings(current_user.id).each do |r|
+			%p
+				= r
+	%div
+		%p.left
+			= link_to "Back to the game", root_path
+		%p.right
+			= link_to "Your highscores", scores_path
+	%div{ style: "border-bottom: 0;" }
+		%p.left
+			= link_to "Terminate account", "#", class: "destroy_user"
+		%p.right
+			= link_to "Clear all highscores", "#", class: "destroy_scores"

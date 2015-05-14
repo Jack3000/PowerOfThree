@@ -38,6 +38,8 @@ h2, h3
 h2
   margin-bottom: 80px
 
+a
+  text-decoration: none
 a:visited
   color: blue
 
@@ -66,13 +68,21 @@ a:visited
       text-align: center
       padding: 4px
       border-radius: 5px
-      p
-        display: none
+      .whose_score
+        overflow: hidden
         font-size: 20px
         position: absolute
-        top: -36px
+        top: -21px
         right: 20px
+        height: 36px
         width: 180px
+        p
+          width: 180px
+          text-align: center
+          margin: 0
+          position: absolute
+          top: 50px
+          @include move-p
       .highscore_value, .score_value
         font-size: 18px
         padding: 6px
@@ -80,11 +90,13 @@ a:visited
       content: "Click to show all users highscore."
       font-size: 12px
     #all_users_highscore:after
-      content: "Click to show personal highscore."
+      content: "Click to show current user highscore."
       font-size: 12px
-    .highscore:hover
-      p
-        display: initial
+    .highscore:hover, .highscore:focus
+      div
+        .slider
+          top: 8px
+          @include move-p
 
 #highscores_table
   position: relative
@@ -101,6 +113,26 @@ a:visited
       height: 20px
       padding: 2px 4px
       text-align: left
+
+.profile_box
+  min-height: 360px
+  div
+    position: relative
+    border-bottom: solid black 1px
+    min-height: 80px
+  .ranker
+    padding-bottom: 15px
+    p
+      margin-left: 30px
+  p
+  .right
+    margin: 29px
+    position: absolute
+    right: 0
+  .left
+    margin: 29px
+    position: absolute
+    left: 0
 
 #highscore_link
   position: absolute

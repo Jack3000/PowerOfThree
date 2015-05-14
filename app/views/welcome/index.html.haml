@@ -11,8 +11,15 @@
       != select_tag('board_size_select', board_size_options)
   .score_wrap
     .highscore#personal_highscore
-      %p
-        Your highscore
+      .whose_score
+        - if current_user == nil
+          %p#yours.slider
+            Anonymous
+        - else
+          %p#yours.slider
+            = current_user.name
+        %p#all_users
+          All users
       Highscore
       .highscore_value
         - if current_user == nil
