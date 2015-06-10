@@ -484,7 +484,7 @@ if (eventCaptureSupported) {
  
  
 (function( $, window, undefined ) {// add new event shortcuts
-$.each(("touchstart touchmove touchend tap taphold swipe swipeleft swiperight" ).split(""), function(i, name) {
+$.each(("touchstart touchmove touchend tap taphold swipe swipeleft swiperight swipeup swipedown" ).split(""), function(i, name) {
 	
 		$.fn[name] = function(fn) {
 			return fn ? this.bind(name, fn) : this.trigger(name);
