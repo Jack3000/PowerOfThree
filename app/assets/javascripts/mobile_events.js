@@ -611,7 +611,7 @@ $.event.special.swipe = {
 								Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ) < $.event.special.swipe.verticalDistanceThreshold ) {
  
 							start.origin.trigger( "swipe" )
-								.trigger( start.coords[0] > stop.coords[ 0 ] ? "swipeleft" : "swiperight" );
+								.trigger( Math.abs( start.coords[ 0 ] - stop.coords[ 0 ] ) > Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ) ? (start.coords[0] > stop.coords[ 0 ] ? "swipeleft" : "swiperight") : (start.coords[1] > stop.coords[ 1 ] ? "swipeup" : "swipedown") );
 						}
 					}
 					start = stop = undefined;
@@ -624,7 +624,9 @@ $.event.special.swipe = {
 $.each({
 	taphold: "tap",
 	swipeleft: "swipe",
-	swiperight: "swipe"
+	swiperight: "swipe",
+	swipeup: "swipe",
+	swipedown: "swipe"
 }, function( event, sourceEvent ) {
 	$.event.special[ event ] = {
 		setup: function() {
