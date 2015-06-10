@@ -11,13 +11,13 @@ $ ->
       create_new_div()
 
     $('#game_container').on 'swipeleft', ->
-      arrow_handler(37)
+      arrow_handler(null, 37)
     $('#game_container').on 'swiperight', ->
-      arrow_handler(39)
+      arrow_handler(null, 39)
     $('#game_container').on 'swipeup', ->
-      arrow_handler(38)
+      arrow_handler(null, 38)
     $('#game_container').on 'swipedown', ->
-      arrow_handler(40)
+      arrow_handler(null, 40)
 
     $('#board_size_select').on 'change', ->
       size = $('#board_size_select option:selected').val()
