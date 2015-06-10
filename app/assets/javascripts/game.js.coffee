@@ -10,6 +10,9 @@ $ ->
     if window.location.pathname == "/"
       create_new_div()
 
+    $('#game_container').on 'swipe', ->
+      alert "SWIPE!"
+
     $('#board_size_select').on 'change', ->
       size = $('#board_size_select option:selected').val()
       param_index = window.location.toString().indexOf("?")
@@ -23,18 +26,22 @@ $ ->
   
     $('.destroy_scores').on 'click', () ->
       confirmation_popup("scores")
+
+    $('.whose_score').on 'click', (e) ->
+      e.stopPropagation()
   
     $('#personal_highscore').on 'click', highscore_to_all_users
   
     $('#all_users_highscore').on 'click', highscore_to_personal
 
-  arrow_handler = (key) ->
-    return if [37,38,39,40].indexOf(key.keyCode) < 0
+  arrow_handler = (key, data) ->
+    key_value = data || key.keyCode
+    return if [37,38,39,40].indexOf(key_value) < 0
     return false if window.gameOver
     window.tookAction = false
     window.checkMove = false
-    conjoin(key.keyCode)
-    move(key.keyCode)
+    conjoin(key_value)
+    move(key_value)
     create_new_div() if window.tookAction
     if window.list.length == 1
       window.noMove = true

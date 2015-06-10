@@ -30,6 +30,9 @@ class Score < ActiveRecord::Base
 				end
 			end
 		end
+		if ranks.length == 0
+			ranks.push("You have no rankings yet.")
+		end
 		ranks
 	end
 end

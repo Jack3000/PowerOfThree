@@ -12,14 +12,14 @@
   .score_wrap
     .highscore#personal_highscore
       .whose_score
-        - if current_user == nil
-          %p#yours.slider
+        %p#yours.slider
+          - if current_user == nil
             Anonymous
-        - else
-          %p#yours.slider
+          - else
             = current_user.name
         %p#all_users
-          All users
+          - top_user = User.find_by_id(Score.where(board_size: board_size).order("score DESC").first.user_id)
+          = top_user ? top_user.name : "Anonymous"
       Highscore
       .highscore_value
         - if current_user == nil

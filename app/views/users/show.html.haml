@@ -1,15 +1,14 @@
-- @title = "Profile"
+- @title = "6561 - Profile Page"
 
-- if current_user.name.downcase.end_with? "s"
-	%h3
+%h3
+	- if current_user.name.downcase.end_with? "s"
 		= "#{current_user.name}' Profile"
-- else
-	%h3
+	- else
 		= "#{current_user.name}'s Profile"
 .profile_box
 	%p
 		= notice
-	%div.ranker
+	.ranker
 		%p
 			%b Your rankings:
 		- Score.get_rankings(current_user.id).each do |r|
