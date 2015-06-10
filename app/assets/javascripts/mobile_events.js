@@ -632,8 +632,7 @@ $.each({
 		}
 	};
 });
- 
-})( jQuery, this );
+
 
 (function () {
 // initializes touch and scroll events
@@ -711,3 +710,5 @@ $.each({
     });
  
 })();
+
+})( jQuery, this );
