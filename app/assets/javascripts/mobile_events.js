@@ -562,7 +562,7 @@ $.event.special.swipe = {
 	durationThreshold: 1000,
 	
 	// Swipe horizontal displacement must be more than this.
-	horizontalDistanceThreshold: 30,
+	horizontalDistanceThreshold: 75,
 	
 	// Swipe vertical displacement must be less than this.
 	verticalDistanceThreshold: 75,  
@@ -611,7 +611,19 @@ $.event.special.swipe = {
 								Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ) < $.event.special.swipe.verticalDistanceThreshold ) {
  
 							start.origin.trigger( "swipe" )
-								.trigger( start.coords[0] > stop.coords[ 0 ] ? "swipeleft" : "swiperight" );
+								.trigger( if (Math.abs(start.coords[0] - stop.coords[0]) > Math.abs(start.coords[1] - stop.coords[1])) {
+														if (start.coords[0] > stop.coords[0]) {
+															"swipeleft";
+														} else {
+															"swiperight";
+														}
+													} else {
+														if (start.coords[1] > stop.coords[1]) {
+															"swipeup";
+														} else {
+															"swipedown";
+														}
+													} );
 						}
 					}
 					start = stop = undefined;
@@ -625,86 +637,8 @@ $.each({
 	taphold: "tap",
 	swipeleft: "swipe",
 	swiperight: "swipe"
-}, function( event, sourceEvent ) {
-	$.event.special[ event ] = {
-		setup: function() {
-			$( this ).bind( sourceEvent, $.noop );
-		}
-	};
-});
-
-
-$.event.special.swipe = {
-	// More than this horizontal displacement, and we will suppress scrolling.
-	scrollSupressionThreshold: 10,
-	
-	// More time than this, and it isn't a swipe.
-	durationThreshold: 1000,
-	
-	// Swipe horizontal displacement must be more than this.
-	horizontalDistanceThreshold: 75,
-	
-	// Swipe vertical displacement must be less than this.
-	verticalDistanceThreshold: 30,  
- 
-	setup: function() {
-		var thisObject = this,
-			$this = $( thisObject );
- 
-		$this.bind( "touchstart", function( event ) {
-			var data = event.originalEvent.touches ?
-								event.originalEvent.touches[ 0 ] : event,
-				start = {
-					time: ( new Date() ).getTime(),
-					coords: [ data.pageX, data.pageY ],
-					origin: $( event.target )
-				},
-				stop;
- 
-			function moveHandler( event ) {
- 
-				if ( !start ) {
-					return;
-				}
- 
-				var data = event.originalEvent.touches ?
-						event.originalEvent.touches[ 0 ] : event;
- 
-				stop = {
-					time: ( new Date() ).getTime(),
-					coords: [ data.pageX, data.pageY ]
-				};
- 
-				// prevent scrolling
-				if ( Math.abs( start.coords[ 0 ] - stop.coords[ 0 ] ) > $.event.special.swipe.scrollSupressionThreshold ) {
-					event.preventDefault();
-				}
-			}
-			
-			$this.bind( "touchmove", moveHandler )
-				.one( "touchend", function( event ) {
-					$this.unbind( "touchmove", moveHandler );
- 
-					if ( start && stop ) {
-						if ( stop.time - start.time < $.event.special.swipe.durationThreshold &&
-								Math.abs( start.coords[ 0 ] - stop.coords[ 0 ] ) > $.event.special.swipe.horizontalDistanceThreshold &&
-								Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ) < $.event.special.swipe.verticalDistanceThreshold ) {
- 
-							start.origin.trigger( "swipe" )
-								.trigger( start.coords[0] > stop.coords[ 0 ] ? "swipeup" : "swipedown" );
-						}
-					}
-					start = stop = undefined;
-				});
-		});
-	}
-};
- 
- 
-$.each({
-	taphold: "tap",
 	swipeup: "swipe",
-	swipedown: "swipe"
+	swipedown: "swipe",
 }, function( event, sourceEvent ) {
 	$.event.special[ event ] = {
 		setup: function() {
