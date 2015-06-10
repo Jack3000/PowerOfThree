@@ -636,9 +636,9 @@ $.event.special.swipe = {
 $.each({
 	taphold: "tap",
 	swipeleft: "swipe",
-	swiperight: "swipe"
+	swiperight: "swipe",
 	swipeup: "swipe",
-	swipedown: "swipe",
+	swipedown: "swipe"
 }, function( event, sourceEvent ) {
 	$.event.special[ event ] = {
 		setup: function() {
