@@ -12,5 +12,4 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require mobile_events
 //= require_tree .
