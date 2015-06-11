@@ -62,6 +62,7 @@ $ ->
     div = "<div id='game_over'>Game Over<input type='submit' class='restarter' value='restart?'></div>"
     $('#game_container').append(div)
     $('.restarter').on('click', restart)
+    $('body').keypress(enter_key_restarter)
     $('#game_over').animate {'opacity': 1}, 1000
     $.ajax
       url: "/scores"
@@ -74,9 +75,13 @@ $ ->
     i = parseInt($('.score_value').text())
     $('.highscore_value').text(i) if i > parseInt($('.highscore_value').text())
     $('.score_value').text(0)
+    $('body').unbind 'keypress', enter_key_restarter
     $('#game_over').remove()
     window.gameOver = false
     create_new_div()
+
+  enter_key_restarter = (key) ->
+    restart() if key.keyCode == 13
 
   show_instructions = () ->
     $.ajax
@@ -84,13 +89,18 @@ $ ->
       success: (response) ->
         $('#main').append(response).fadeIn()
         $('#how_to_play a').on 'click', hide_instructions
+        $('body').on 'click', hide_instructions
+        $('.instruct_box').on 'click', (e) ->
+          e.stopPropagation()
     $('body').css('overflow','hidden')
-    $('body').off('keydown', arrow_handler) 
+    $('body').off('keydown', arrow_handler)
+
 
   hide_instructions = () ->
     $('#how_to_play').remove()
     $('body').css('overflow','scroll')
-    $('body').on('keydown', arrow_handler) 
+    $('body').on('keydown', arrow_handler)
+    $('body').off('click', hide_instructions)
 
   confirmation_popup = (destroy_target) ->
     if destroy_target == "user"
