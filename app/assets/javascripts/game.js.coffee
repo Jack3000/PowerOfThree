@@ -21,11 +21,7 @@ $ ->
 
     $('#board_size_select').on 'change', ->
       size = $('#board_size_select option:selected').val()
-      param_index = window.location.toString().indexOf("?")
-      if param_index > -1
-        window.location = window.location.toString().slice(0, param_index) + '?board_size=' + size
-      else
-        window.location = window.location.toString() + '?board_size=' + size
+      window.location = window.location.pathname + '?board_size=' + size
 
     $('.destroy_user').on 'click', () ->
       confirmation_popup("user")
