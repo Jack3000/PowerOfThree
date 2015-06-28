@@ -1,9 +1,9 @@
 != form_for :user, html: {id: 'signup_form'}, url: users_path do |f|
   - if @user
     .errors
-      - @user.errors.full_messages.each do |f|
+      - @user.errors.full_messages.each do |e|
         .error
-          != f
+          != e
   != f.label :name
   != f.text_field :name
   != f.label :email

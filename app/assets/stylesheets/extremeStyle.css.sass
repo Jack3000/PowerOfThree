@@ -1,0 +1,129 @@
+@import "common"
+
+body
+  font-size: 20px
+  width: 860px
+  margin: 0 auto
+  background-color: #181f26
+  
+  #borderer
+    background-color: #6f717e
+    padding: 30px
+
+  #main
+    background-color: #C6C2D3
+    padding-bottom: 50px
+    border-radius: 5px
+    border: solid #C6C2D3 1px
+    position: relative
+
+.log_box
+  position: absolute
+  right: 15px
+  top: 15px
+  min-width: 150px
+  font-size: 14px
+
+  .login_form
+    border: solid black 3px
+    padding: 5px
+    background-color: #F0EBFF
+    width: 200px
+h2
+  font-size: 250%
+  text-align: center
+  padding-top: 25px
+
+#extreme_game_container
+  position: relative
+  max-width: 720px
+  max-height: 720px
+  margin: 5px auto 0
+  font-size: 0
+
+  #extreme_board
+    z-index: 1
+    position: absolute
+    left: 50%
+    margin-left: -50%
+    width: 100%
+    height: 100%
+
+    .extreme_board_row
+      position: absolute
+      width: 100%
+
+      .extreme_board_cell
+        position: absolute
+        background-color: #b0b6bc
+        height: 100%
+
+        .extreme_board_inner_cell
+          width: 100%
+          height: 100%
+          background-color: #80868c
+          border-radius: 4px
+
+      .extreme_board_cell.hole
+        background-color: #C6C2D3
+
+  .extreme_tile
+    z-index: 10
+    position: absolute
+    border-radius: 4px
+    @include move-tile()
+
+    .extreme_tile_value
+      position: absolute
+      width: 100%
+      top: 33%
+      text-align: center
+
+  #game_over
+    z-index: 3
+    position: relative
+    width: 70%
+    height: 70%
+    padding: 15%
+    background-color: rgba(128, 128, 128, 0.75)
+    font-size: 50px
+    text-align: center
+    opacity: 0
+
+    .restarter
+      display: block
+      margin: 25% auto
+
+.power_1
+  background-color: #ff8
+
+.power_2
+  background-color: #ff0
+
+.power_3
+  background-color: #fa0
+
+.power_4
+  background-color: #f30
+
+.power_5
+  background-color: #d2d
+
+.power_6
+  background-color: #26f
+
+.power_7
+  background-color: #4a6
+
+.power_8
+  background-color: #555
+  color: white
+
+.power_9
+  background-color: #333
+  color: white
+
+@for $p from 10 through 20 
+  .power_#{$p}
+    background-color: #000
+    color: white
