@@ -4,20 +4,110 @@
 $ ->
 	$(document).ready ->
 		if window.location.pathname == '/extreme'
+			window.game_is_over = false
+
 			set_board_size()
 			set_tile_style()
-			deactivate_board_cells($('#extreme_board').data('holes'))
+			deactivate_board_cells($('#extreme_board').data('custom-holes'), $('#extreme_board').data('random-holes'))
 			set_board_border()
 			create_random_extreme_tile()
-			$('body').keydown(arrow_handler)
+			$('body').keydown arrow_handler
+
+			$('#option_opener').on 'click', show_options
+			$('.nevermind').on 'click', hide_options
+			$('.customize_board_holes').on 'click', customizable_board_popup
 
 	arrow_handler = (key) ->
 		key_value = key.keyCode
 		return if [37,38,39,40].indexOf(key_value) < 0
+		return false if window.game_is_over == true
+		window.tookAction = false
+		window.check_move = false
 		conjoin(key_value)
 		move(key_value)
-		create_random_extreme_tile()
+		if window.tookAction
+			create_random_extreme_tile()
+			if window.active_indices.length == 1
+				window.no_move = true
+				window.check_move = true
+				conjoin(37)
+				conjoin(38)
+				game_over() if window.no_move
+		else
+			window.no_move = true
+			window.check_move = true
+			move(37)
+			move(38) if window.no_move
+			move(39) if window.no_move
+			move(40) if window.no_move
+			game_over() if window.no_move
 		false
+
+	show_options = ->
+		$('#options').slideDown()
+		$('body').off('keydown')
+		$('body').keydown ->
+			false
+		false
+
+	hide_options = ->
+		$('#options').slideUp()
+		$('body').off('keydown')
+		$('body').on('keydown', arrow_handler)
+
+	customizable_board_popup = ->
+		board_height = parseInt($('#height option:selected').val())
+		board_length = parseInt($('#length option:selected').val())
+		virtual_board_cells = ""
+		if board_height > board_length
+			size_defining_value = board_height
+		else
+			size_defining_value = board_length
+		if size_defining_value <= 6
+			cell_size = 120
+		else
+			cell_size = 720 / size_defining_value
+		i = 1
+		while i <= board_height
+			virtual_board_row = "<div class='virtual_board_row' style='height: #{ cell_size * 5 / 6 }px; top: #{cell_size * ( i - 1 )}px'>"
+			j = 1
+			while j <= board_length
+				virtual_board_cell = "<div class='virtual_board_cell' data-row='#{i}' data-column='#{j}' style='width: #{ cell_size * 5 / 6 }px; padding: #{ cell_size * 1 / 12 }px; left: #{cell_size * ( j - 1 )}px'><div class='virtual_board_inner_cell'></div></div>"
+				virtual_board_row += virtual_board_cell
+				virtual_board_row += "</div>" if j == board_length
+				j++
+			virtual_board_cells += virtual_board_row
+			virtual_board_cells += "</div>" if i == board_height
+			i++
+		the_popup = "<div class='virtual_backgrounder'><div class='virtual_box'><div class='virtual_board' style='left: #{cell_size * board_length / -2}px'>#{virtual_board_cells}<a href='#'>Done</a></div></div></div>"
+		$('body').append(the_popup)
+		$('.custom_holes_input').val("")
+		$('.virtual_box a').on 'click', ->
+			$('.virtual_hole').each (i, hole) ->
+				index = ($(hole).data('row') - 1) * board_length + $(hole).data('column')
+				if $('.custom_holes_input').val() == ""
+					$('.custom_holes_input').val(index)
+				else
+					$('.custom_holes_input').val($('.custom_holes_input').val() + "-#{index}")
+			$('.virtual_backgrounder').remove()
+			$('body').css('overflow','scroll')
+			false
+		$('body').css('overflow','hidden')
+		$('.virtual_board_cell').on 'click', ->
+			virtual_to_hole(this)
+		$('.virtual_hole').on 'click', ->
+			virtual_to_cell(this)
+		false
+
+	virtual_to_hole = (cell) ->
+		$(cell).removeClass('virtual_board_cell').addClass('virtual_hole')
+		$(cell).on 'click', ->
+			virtual_to_cell(this)
+
+	virtual_to_cell = (hole) ->
+		$(hole).removeClass('virtual_hole').addClass('virtual_board_cell')
+		$(hole).on 'click', ->
+			virtual_to_hole(this)
 
 	set_board_size = () ->
 		board_height = $('#extreme_board').data('height')
@@ -162,17 +252,29 @@ $ ->
 				if active_top
 					$(hole).css({"border-top-left-radius": "4px"})
 
-	deactivate_board_cells = (holes) ->
+	deactivate_board_cells = (custom_holes, random_holes) ->
+		custom_hole_puncher(custom_holes) unless custom_holes == undefined
+		random_hole_puncher(random_holes)
+
+	custom_hole_puncher = (custom_holes) ->
+		board_length = $('#extreme_board').data('length')
+		indices = custom_holes.split("-")
+		indices.map (hole_i) ->
+			row = Math.ceil(parseInt(hole_i) / board_length)
+			column = parseInt(hole_i) % board_length
+			column = board_length if (column == 0)
+			new_hole = $(".extreme_board_cell[data-row=#{row}][data-column=#{column}]")
+			new_hole.removeClass('active').addClass('hole')
+			new_hole.find('.extreme_board_inner_cell').remove()
+
+	random_hole_puncher = (random_holes) ->
 		holey_indices = []
 		unholey_indices = []
-		board_height = $('#extreme_board').data('height')
 		board_length = $('#extreme_board').data('length')
-		j = 1
-		while j <= (board_height * board_length)
-			unholey_indices.push(j)
-			j++
+		$('.active').each (i, cell) ->
+				unholey_indices.push(($(cell).data('row') - 1) * board_length + $(cell).data('column'))
 		i = 1
-		while i <= holes
+		while i <= random_holes
 			index = Math.floor(Math.random() * unholey_indices.length)
 			holey_indices.push(unholey_indices[index])
 			unholey_indices.splice(index, 1)
@@ -298,7 +400,10 @@ $ ->
 								if match
 									conjoinees.push(next_tile)
 									if conjoinees.length == num_to_conjoin
-										join(conjoinees)
+										if window.check_move
+											return window.no_move = false
+										else
+											join(conjoinees)
 										first_tile_index = first_tile_index + next_tile_index + 1
 										next_tile_index = tile_axis_length + 2
 										i = num_to_conjoin
@@ -308,20 +413,32 @@ $ ->
 										i++
 								else
 									if power_base == "free_style"
-										join(conjoinees) if conjoinees.length > 1
+										if conjoinees.length > 1
+											if window.check_move
+												window.no_move = false
+											else
+												join(conjoinees)
 									first_tile_index = previous_tile_index + next_tile_index
 									next_tile_index = tile_axis_length + 2
 									i = num_to_conjoin
 							else if $(".hole[data-#{general_axis}='#{Math.abs(axis_index)}'][data-#{tile_axis}='#{Math.abs(previous_tile_index + next_tile_index)}']").length
 								if power_base == "free_style"
-									join(conjoinees) if conjoinees.length > 1
+									if conjoinees.length > 1
+										if window.check_move
+											window.no_move = false
+										else
+											join(conjoinees)
 								first_tile_index = previous_tile_index + next_tile_index + 1
 								next_tile_index = tile_axis_length + 2
 								i = num_to_conjoin
 							else
 								if (1 <= Math.abs(previous_tile_index + next_tile_index) <= tile_axis_length) == false
 									if power_base == "free_style"
-										join(conjoinees) if conjoinees.length > 1
+										if conjoinees.length > 1
+											if window.check_move
+												window.no_move = false
+											else
+												join(conjoinees)
 									next_tile_index = tile_axis_length + 2
 									i = num_to_conjoin
 									first_tile_index = tile_final_index + 1
@@ -340,15 +457,17 @@ $ ->
 			data = "data-row='#{row}' data-column='#{column}' data-value='#{value}'"
 			klass = "extreme_tile row_#{row} column_#{column} power_#{Math.ceil(value / 10)}"
 			new_tile = "<div class='#{klass}' #{data}><div class='extreme_tile_value'>#{value}</div></div>"
+			conjoinees[conjoinees.length - 1].removeClass("power_" + Math.ceil(conjoinees[conjoinees.length - 1].data("value") / 10)).addClass("power_" + Math.ceil(value / 10))
+			conjoinees[conjoinees.length - 1].data("value", value)
+			conjoinees[conjoinees.length - 1].children().text(value)
 		else
 			power = conjoinees[conjoinees.length - 1].data("power") + 1
 			value = Math.pow(power_base, power)
-			data = "data-row='#{row}' data-column='#{column}' data-power='#{power}'"
-			klass = "extreme_tile row_#{row} column_#{column} power_#{power}"
-			new_tile = "<div class='#{klass}' #{data}><div class='extreme_tile_value'>#{value}</div></div>"
+			conjoinees[conjoinees.length - 1].data("power", power)
+			conjoinees[conjoinees.length - 1].removeClass("power_" + (power - 1)).addClass("power_" + power)
+			conjoinees[conjoinees.length - 1].children().text(value)
 		conjoinees.map (x) ->
-			x.remove()
-		$('#extreme_tiles').append(new_tile)
+			x.remove() unless conjoinees.indexOf(x) == conjoinees.length - 1
 
 	move = (key_value) ->
 		board_height = $('#extreme_board').data('height')
@@ -387,7 +506,10 @@ $ ->
 				current_tile = $('.extreme_tile.' + general_axis + '_' + Math.abs(general_axis_index) + '.' + tile_axis + '_' + Math.abs(tile_axis_index))
 				if current_tile.length
 					if Math.abs(current_tile.data("#{tile_axis}") - Math.abs(tile_axis_initial_value)) > Math.abs(Math.abs(first_empty) - Math.abs(tile_axis_initial_value))
-						move_tile(current_tile, Math.abs(first_empty), tile_axis)
+						if window.check_move
+							window.no_move = false
+						else
+							move_tile(current_tile, Math.abs(first_empty), tile_axis)
 					first_empty++
 				else
 					if $(".hole[data-#{general_axis}='#{Math.abs(general_axis_index)}'][data-#{tile_axis}='#{Math.abs(tile_axis_index)}']").length
@@ -398,3 +520,23 @@ $ ->
 	move_tile = (current_tile, first_empty, tile_axis) ->
 		$(current_tile).removeClass(tile_axis + "_" + (current_tile.data(tile_axis))).addClass(tile_axis + "_" + first_empty)
 		$(current_tile).data(tile_axis, first_empty)
+		window.tookAction = true
+
+	game_over = () ->
+		window.game_is_over = true
+		div_padding = "padding: #{parseFloat($('#extreme_game_container').css('height').slice(0, -2)) * 0.15}px #{parseFloat($('#extreme_game_container').css('width').slice(0, -2)) * 0.15}px;"
+		div = "<div id='game_over' style='#{div_padding}'>Game Over<input type='submit' class='restarter' value='restart?'></div>"
+		$('#extreme_game_container').append(div)
+		$('.restarter').on('click', restart)
+		$('body').keypress(enter_key_restarter)
+		$('#game_over').animate {'opacity': 1}, 1000
+
+	enter_key_restarter = (key) ->
+		restart() if key.keyCode == 13
+
+	restart = () ->
+		$('.extreme_tile').remove()
+		$('body').unbind 'keypress', enter_key_restarter
+		$('#game_over').remove()
+		window.game_is_over = false
+		create_random_extreme_tile()

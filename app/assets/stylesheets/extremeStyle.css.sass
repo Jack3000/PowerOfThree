@@ -11,6 +11,7 @@ body
     padding: 30px
 
   #main
+    min-height: 1000px
     background-color: #C6C2D3
     padding-bottom: 50px
     border-radius: 5px
@@ -34,18 +35,23 @@ h2
   text-align: center
   padding-top: 25px
 
+#option_opener
+  display: block
+  text-align: center
+  text-decoration: none
+  color: red
+  font-size: 32px
+
 #extreme_game_container
   position: relative
   max-width: 720px
   max-height: 720px
-  margin: 5px auto 0
+  margin: 30px auto 0
   font-size: 0
 
   #extreme_board
     z-index: 1
     position: absolute
-    left: 50%
-    margin-left: -50%
     width: 100%
     height: 100%
 
@@ -80,11 +86,11 @@ h2
       text-align: center
 
   #game_over
-    z-index: 3
-    position: relative
+    z-index: 20
+    position: absolute
+    top: 0
     width: 70%
     height: 70%
-    padding: 15%
     background-color: rgba(128, 128, 128, 0.75)
     font-size: 50px
     text-align: center
@@ -93,6 +99,72 @@ h2
     .restarter
       display: block
       margin: 25% auto
+
+#options
+  display: none
+  z-index: 100
+  position: absolute
+  left: 35px
+  width: 730px
+  height: 730px
+  margin: 30px auto
+  background-color: #C6C2D3
+
+  a
+    font-size: 18px
+    text-decoration: none
+
+.virtual_backgrounder
+  z-index: 1000
+  position: absolute
+  top: 0
+  left: 0
+  height: 2000px
+  width: 100%
+  background-color: rgba(0, 0, 0, 0.75)
+
+  .virtual_box
+    position: fixed
+    top: 45%
+    left: 50%
+    height: 800px
+    width: 750px
+    margin: -375px
+    background-color: #C6C2D3
+
+    .virtual_board
+      position: relative
+      margin-left: 50%
+      margin-top: 25px
+      font-size: 0
+
+      .virtual_board_row
+        position: absolute
+        width: 100%
+
+        .virtual_board_cell
+          position: absolute
+          background-color: #b0b6bc
+          height: 100%
+
+          .virtual_board_inner_cell
+            width: 100%
+            height: 100%
+            background-color: #80868c
+            border-radius: 4px
+
+        .virtual_hole
+          position: absolute
+          background-color: #b0b6bc
+          height: 100%
+          background-color: #C6C2D3
+
+    a
+      position: absolute
+      margin-left: 50%
+      bottom: 20px
+      width: 50px
+      left: -25px
 
 .power_1
   background-color: #ff8

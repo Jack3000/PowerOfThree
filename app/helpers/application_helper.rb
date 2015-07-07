@@ -48,9 +48,13 @@ module ApplicationHelper
     size.in?(1..20) ? size : DEFAULT_EXTREME_BOARD_LENGTH
   end
 
-  def extreme_board_holes
-    holes = params[:holes].to_i
-    holes.in?(0..50) ? holes : 0
+  def extreme_board_custom_holes
+    custom_holes = params[:custom_holes]
+  end
+
+  def extreme_board_random_holes
+    random_holes = params[:random_holes].to_i
+    random_holes.in?(0..50) ? random_holes : 0
   end
 
   def extreme_board_power_base
