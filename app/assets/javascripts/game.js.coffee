@@ -103,7 +103,7 @@ $ ->
       confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' wil terminate your account and erase all your highscores permanently. Click 'no' to abort."
     else if destroy_target == "scores"
       confirmation_message = "!<br>Are you sure?<br>Clicking 'yes' will permanently erase all of your highscores. Click 'no' to abort."
-    $('body').css('overflow','hidden');
+    $('body').css('overflow','hidden')
     inner_div_style = "style='height: 150px; width: 430px; padding: 15px; background-color: rgb(167, 141, 112); border: double #aa4040 10px;position: fixed; top: 35%; left: 50%;margin: -75px -225px;z-index: 9999; line-height: 24px;'"
     outer_div_style = "style='z-index: 9998; height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: rgba(80, 80, 80, 0.8);'"
     button_style = "style='display: inline-block; height: 20px; width: 60px; margin-right: 20px;'"

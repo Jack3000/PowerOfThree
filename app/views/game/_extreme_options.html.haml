@@ -1,0 +1,41 @@
+!= form_tag('/extreme', method: 'get') do
+  %div
+    %h3
+      Combination options
+    .options_for_category
+      != label_tag 'power_base', 'Number of tiles to combine:'
+      != select_tag( 'power_base', options_for_select(Array.new(5) { |index| index == 4 ? "free_style" : index + 2 }, extreme_board_power_base) )
+  %hr
+  %div
+    %h3
+      Board size and shape
+    .options_for_category
+      %div
+        != label_tag 'height', 'Board height:'
+        != select_tag( 'height', options_for_select(Array.new(20) { |index| index + 1 }, extreme_board_height) )
+        %br
+        != label_tag 'length', 'Board length:'
+        != select_tag( 'length', options_for_select(Array.new(20) { |index| index + 1 }, extreme_board_length) )
+      %div
+        %a{ class: "customize_board_holes", href: '#' }
+          Customize board
+        %input{ class: "custom_holes_input", type: "hidden", name: "custom_holes", value: extreme_board_custom_holes }
+        != label_tag 'random_holes', 'Random board eraser:'
+        != select_tag( 'random_holes', options_for_select(Array.new(51) { |index| index }, extreme_board_random_holes) )
+        %br
+  %hr
+  %div
+    %h3
+      Random drop options
+    .options_for_category
+      != label_tag 'drop_range', 'Random drop range:'
+      != select_tag( 'drop_range', options_for_select(Array.new(10) { |index| index + 1 }, extreme_board_drop_range) )
+      %br
+      != label_tag 'higher_drop_likelihood', 'Likelihood of getting higher drops:'
+      != select_tag( 'higher_drop_likelihood', options_for_select([["very often", 2], ["mildly often", 3], ["average", 4], ["mildly rare", 6], ["very rare", 12]], extreme_board_higher_drop_likelihood) )
+      %br
+      != label_tag 'forced_drops', 'Enable forced drops:'
+      != check_box_tag( 'forced_drops', 'enabled', (extreme_board_forced_drops == "enabled" ? true : false) )
+  %hr
+  != submit_tag( 'start game' )
+  %input{ type: "button", class: "nevermind", value: "Nevermind" }

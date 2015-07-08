@@ -59,7 +59,7 @@ module ApplicationHelper
 
   def extreme_board_power_base
     params[:power_base] == "free_style" ? power_base = params[:power_base] : power_base = params[:power_base].to_i
-    (power_base.in?(2..4) || power_base == "free_style") ? power_base : 3
+    (power_base.in?(2..5) || power_base == "free_style") ? power_base : 3
   end
 
   def extreme_board_drop_range
@@ -70,5 +70,10 @@ module ApplicationHelper
   def extreme_board_higher_drop_likelihood
     higher_drop_likelihood = params[:higher_drop_likelihood].to_i
     ([2, 3, 4, 6, 12].include? higher_drop_likelihood) ? higher_drop_likelihood : 4
+  end
+
+  def extreme_board_forced_drops
+    forced_drops = params[:forced_drops]
+    forced_drops == "enabled" ? forced_drops : "disabled"
   end
 end

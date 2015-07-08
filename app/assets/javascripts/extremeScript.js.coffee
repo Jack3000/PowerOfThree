@@ -15,17 +15,21 @@ $ ->
 
 			$('#option_opener').on 'click', show_options
 			$('.nevermind').on 'click', hide_options
+			$('#options h3').on 'click', ->
+				$(this).parent().find('.options_for_category').slideToggle()
 			$('.customize_board_holes').on 'click', customizable_board_popup
+			$('select#height, select#length').on 'change', ->
+				$('.custom_holes_input').val("")
 
 	arrow_handler = (key) ->
 		key_value = key.keyCode
-		return if [37,38,39,40].indexOf(key_value) < 0
+		return if [32,37,38,39,40].indexOf(key_value) < 0
 		return false if window.game_is_over == true
 		window.tookAction = false
 		window.check_move = false
-		conjoin(key_value)
-		move(key_value)
-		if window.tookAction
+		conjoin(key_value) unless key_value == 32
+		move(key_value) unless key_value == 32
+		if window.tookAction || ( key_value == 32 && $('#extreme_board').data('forced-drops') == 'enabled' )
 			create_random_extreme_tile()
 			if window.active_indices.length == 1
 				window.no_move = true
@@ -33,7 +37,7 @@ $ ->
 				conjoin(37)
 				conjoin(38)
 				game_over() if window.no_move
-		else
+		else if $('#extreme_board').data('forced-drops') == 'disabled'
 			window.no_move = true
 			window.check_move = true
 			move(37)
@@ -81,6 +85,13 @@ $ ->
 			i++
 		the_popup = "<div class='virtual_backgrounder'><div class='virtual_box'><div class='virtual_board' style='left: #{cell_size * board_length / -2}px'>#{virtual_board_cells}<a href='#'>Done</a></div></div></div>"
 		$('body').append(the_popup)
+		if $('.custom_holes_input').val() != ""
+			indices = $('.custom_holes_input').val().split("-")
+			indices.map (index) ->
+				row = Math.ceil(parseInt(index) / board_length)
+				column = parseInt(index) % board_length
+				column = board_length if (column == 0)
+				$(".virtual_board_cell[data-row=#{row}][data-column=#{column}]").removeClass('virtual_board_cell').addClass('virtual_hole')
 		$('.custom_holes_input').val("")
 		$('.virtual_box a').on 'click', ->
 			$('.virtual_hole').each (i, hole) ->

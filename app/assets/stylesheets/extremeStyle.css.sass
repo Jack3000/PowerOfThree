@@ -110,9 +110,39 @@ h2
   margin: 30px auto
   background-color: #C6C2D3
 
-  a
-    font-size: 18px
-    text-decoration: none
+  .options_for_category
+    display: none
+
+    div
+      display: inline-block
+      width: 360px
+    
+    a
+      text-decoration: none
+      display: block
+      margin-bottom: 12px
+      position: relative
+
+  h3:hover
+    cursor: pointer
+
+  select
+    width: 80px
+    height: 24px
+    margin: 10px
+
+  input[type='checkbox']
+    position: relative
+    top: 4px
+    height: 18px
+    width: 18px
+
+
+  input[type='submit'], input[type='button']
+    margin: 15px 100px
+    height: 32px
+    width: 150px
+    font-size: 16px
 
 .virtual_backgrounder
   z-index: 1000
@@ -146,6 +176,8 @@ h2
           position: absolute
           background-color: #b0b6bc
           height: 100%
+          &:hover
+            cursor: pointer
 
           .virtual_board_inner_cell
             width: 100%
@@ -158,6 +190,8 @@ h2
           background-color: #b0b6bc
           height: 100%
           background-color: #C6C2D3
+          &:hover
+            cursor: pointer
 
     a
       position: absolute

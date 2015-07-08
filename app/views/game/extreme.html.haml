@@ -13,20 +13,9 @@
         #extreme_above_game
           %a#option_opener{ href: '#' }
             Extreme Options
-          %div#options
-            != form_tag('/extreme', method: 'get') do
-              != select_tag( 'height', options_for_select(Array.new(20) { |index| index + 1 }, extreme_board_height) )
-              != select_tag( 'length', options_for_select(Array.new(20) { |index| index + 1 }, extreme_board_length) )
-              != select_tag( 'random_holes', options_for_select(Array.new(51) { |index| index }, extreme_board_random_holes) )
-              != select_tag( 'power_base', options_for_select(Array.new(4) { |index| index == 3 ? "free_style" : index + 2 }, extreme_board_power_base) )
-              != select_tag( 'drop_range', options_for_select(Array.new(10) { |index| index + 1 }, extreme_board_drop_range) )
-              != select_tag( 'higher_drop_likelihood', options_for_select(Array.new(5) { |index| ([0, 1, 2].include? index) ? index + 2 : index * (index - 1) }, extreme_board_higher_drop_likelihood) )
-              %a{ class: "customize_board_holes", href: '#' }
-                Customize board
-              %input{ class: "custom_holes_input", type: "hidden", name: "custom_holes" }
-              != submit_tag( 'start game' )
-              %input{ type: "button", class: "nevermind", value: "Nevermind" }
+          #options
+            != render 'extreme_options'
         #extreme_game_container
-          #extreme_board{ data: { length: extreme_board_length, height: extreme_board_height, custom_holes: extreme_board_custom_holes, random_holes: extreme_board_random_holes, power_base: extreme_board_power_base, drop_range: extreme_board_drop_range, higher_drop_likelihood: extreme_board_higher_drop_likelihood } }
+          #extreme_board{ data: { length: extreme_board_length, height: extreme_board_height, custom_holes: extreme_board_custom_holes, random_holes: extreme_board_random_holes, power_base: extreme_board_power_base, drop_range: extreme_board_drop_range, higher_drop_likelihood: extreme_board_higher_drop_likelihood, forced_drops: extreme_board_forced_drops } }
             - build_extreme_game_board
           #extreme_tiles
