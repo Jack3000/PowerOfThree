@@ -31,19 +31,15 @@ $ ->
 		move(key_value) unless key_value == 32
 		if window.tookAction || ( key_value == 32 && $('#extreme_board').data('forced-drops') == 'enabled' )
 			create_random_extreme_tile()
-			if window.active_indices.length == 1
-				window.no_move = true
-				window.check_move = true
-				conjoin(37)
-				conjoin(38)
-				game_over() if window.no_move
-		else if $('#extreme_board').data('forced-drops') == 'disabled'
+		unless $('#extreme_board').data('forced-drops') == 'enabled' && window.active_indices.length > 1
 			window.no_move = true
 			window.check_move = true
 			move(37)
 			move(38) if window.no_move
 			move(39) if window.no_move
 			move(40) if window.no_move
+			conjoin(37) if window.no_move
+			conjoin(38) if window.no_move
 			game_over() if window.no_move
 		false
 
