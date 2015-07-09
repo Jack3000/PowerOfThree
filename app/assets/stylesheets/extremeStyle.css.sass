@@ -111,16 +111,27 @@ h2
   background-color: #C6C2D3
 
   .options_for_category
+    position: relative
     display: none
 
-    div
+    .horizontal_divider
       display: inline-block
       width: 360px
-    
+      vertical-align: top
+
+      .option_wrapper
+        position: relative
+        vertical-align: bottom
+
+      select, input[type='checkbox']
+        position: absolute
+        right: 0
+        bottom: -2px
+
     a
       text-decoration: none
       display: block
-      margin-bottom: 12px
+      margin: 10px
       position: relative
 
   h3:hover
@@ -131,12 +142,16 @@ h2
     height: 24px
     margin: 10px
 
+  label
+    margin: 10px
+    display: inline-block
+
   input[type='checkbox']
     position: relative
     top: 4px
     height: 18px
     width: 18px
-
+    margin: 10px
 
   input[type='submit'], input[type='button']
     margin: 15px 100px
@@ -233,3 +248,8 @@ h2
   .power_#{$p}
     background-color: #000
     color: white
+
+.dead_tile
+  background-image: url(skull.jpg)
+  background-size: 100% 100%
+  background-repeat: no-repeat

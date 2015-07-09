@@ -10,8 +10,8 @@ $ ->
 			set_tile_style()
 			deactivate_board_cells($('#extreme_board').data('custom-holes'), $('#extreme_board').data('random-holes'))
 			set_board_border()
-			create_random_extreme_tile()
 			$('body').keydown arrow_handler
+			create_random_extreme_tile()
 
 			$('#option_opener').on 'click', show_options
 			$('.nevermind').on 'click', hide_options
@@ -327,9 +327,6 @@ $ ->
 	create_random_extreme_tile = ->
 		board_height = $('#extreme_board').data('height')
 		board_length = $('#extreme_board').data('length')
-		power_base = $('#extreme_board').data('power-base')
-		drop_range = $('#extreme_board').data('drop-range')
-		higher_drop_likelihood = $('#extreme_board').data('higher-drop-likelihood')
 		window.active_indices = []
 		$('.active').map (i, el) ->
 			window.active_indices.push(($(el).data("row") - 1) * board_length + $(el).data("column"))
@@ -341,15 +338,26 @@ $ ->
 		row = Math.ceil(index / board_length)
 		column = index % board_length
 		column = board_length if (column == 0)
-		power = get_initial_power(drop_range, higher_drop_likelihood)
-		value = get_initial_value(power_base, power)
-		if power_base == "free_style"
-			data = "data-row='#{row}' data-column='#{column}' data-value='#{value}'"
-			klass = "extreme_tile row_#{row} column_#{column} power_#{Math.ceil(value / 10)}"
-		else
+		dead_tile_drop_frequency = [0, 2000, 400, 80][['never', 'very rarely', 'sometimes', 'alarmingly frequently'].indexOf($('#extreme_board').data('dead-tile-drop-frequency'))]
+		if Math.floor(Math.random() * dead_tile_drop_frequency) + 1 == 2
+			power = NaN
 			data = "data-row='#{row}' data-column='#{column}' data-power='#{power}'"
-			klass = "extreme_tile row_#{row} column_#{column} power_#{power}"
-		div = "<div class='#{klass}' #{data}><div class='extreme_tile_value'>#{value}</div></div>"
+			klass = "extreme_tile dead_tile row_#{row} column_#{column} power_#{power}"
+			value_div = ""
+		else
+			power_base = $('#extreme_board').data('power-base')
+			drop_range = $('#extreme_board').data('drop-range')
+			higher_drop_likelihood = $('#extreme_board').data('higher-drop-likelihood')
+			power = get_initial_power(drop_range, higher_drop_likelihood)
+			value = get_initial_value(power_base, power)
+			value_div = "<div class='extreme_tile_value'>#{value}</div>"
+			if power_base == "free_style"
+				data = "data-row='#{row}' data-column='#{column}' data-value='#{value}'"
+				klass = "extreme_tile row_#{row} column_#{column} power_#{Math.ceil(value / 10)}"
+			else
+				data = "data-row='#{row}' data-column='#{column}' data-power='#{power}'"
+				klass = "extreme_tile row_#{row} column_#{column} power_#{power}"
+		div = "<div class='#{klass}' #{data}>#{value_div}</div>"
 		$('#extreme_tiles').append(div)
 
 	conjoin = (key_value) ->

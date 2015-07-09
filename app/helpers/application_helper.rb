@@ -76,4 +76,9 @@ module ApplicationHelper
     forced_drops = params[:forced_drops]
     forced_drops == "enabled" ? forced_drops : "disabled"
   end
+
+  def extreme_board_dead_tile_drops
+    dead_tile_drop_frequency = params[:dead_tile_drops]
+    (['never', 'very rarely', 'sometimes', 'alarmingly frequently'].include? dead_tile_drop_frequency) ? dead_tile_drop_frequency : 'never'
+  end
 end
