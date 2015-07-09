@@ -341,7 +341,7 @@ $ ->
 		dead_tile_drop_frequency = [0, 2000, 400, 80][['never', 'very rarely', 'sometimes', 'alarmingly frequently'].indexOf($('#extreme_board').data('dead-tile-drop-frequency'))]
 		if Math.floor(Math.random() * dead_tile_drop_frequency) + 1 == 2
 			power = NaN
-			data = "data-row='#{row}' data-column='#{column}' data-power='#{power}'"
+			data = "data-row='#{row}' data-column='#{column}' data-power='#{power}' data-value='NaN'"
 			klass = "extreme_tile dead_tile row_#{row} column_#{column} power_#{power}"
 			value_div = ""
 		else
