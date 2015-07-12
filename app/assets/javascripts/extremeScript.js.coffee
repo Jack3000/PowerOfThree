@@ -539,8 +539,9 @@ $ ->
 
 	game_over = () ->
 		window.game_is_over = true
-		div_padding = "padding: #{parseFloat($('#extreme_game_container').css('height').slice(0, -2)) * 0.15}px #{parseFloat($('#extreme_game_container').css('width').slice(0, -2)) * 0.15}px;"
-		div = "<div id='game_over' style='#{div_padding}'>Game Over<input type='submit' class='restarter' value='restart?'></div>"
+		board_size = $('#extreme_board').css('height')
+		board_size = $('#extreme_board').css('width') if $('#extreme_board').css('width') > $('#extreme_board').css('height')
+		div = "<div id='game_over' style='left: #{ -(parseInt($('#extreme_game_container').css('margin-left').slice(0, -2)) - 36) }px;'><img src='assets/GameOver.png' alt='Game Over'><p>(press enter to restart)</p></div>"
 		$('#extreme_game_container').append(div)
 		$('.restarter').on('click', restart)
 		$('body').keypress(enter_key_restarter)

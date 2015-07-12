@@ -1,6 +1,7 @@
 - @title = 6561
 
 %h2= @title
+= link_to "Try the extreme version here!", extreme_path, id: "extreme_link"
 #abovegame{ data: { size: board_size } }
   .instructions{ style: "position: absolute; left: 30px;" }
     %a{ href: "#" }
