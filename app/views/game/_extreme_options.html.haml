@@ -47,5 +47,14 @@
           != label_tag 'dead_tile_drops', 'Dead tiles will drop:'
           != select_tag( 'dead_tile_drops', options_for_select( ['never', 'very rarely', 'sometimes', 'alarmingly frequently'], extreme_board_dead_tile_drops ) )
   %hr
+  %div
+    %h3
+      Ice and iceless holes
+    .options_for_category
+      .horizontal_divider
+        .option_wrapper
+          != label_tag 'random_iceless_holes', 'Random iceless holes:'
+          != select_tag( 'random_iceless_holes', options_for_select(Array.new(26) { |index| index }, extreme_board_random_iceless_holes) )
+  %hr
   != submit_tag( 'start game' )
   %input{ type: "button", class: "nevermind", value: "Nevermind" }

@@ -10,6 +10,7 @@ $ ->
 			set_tile_style()
 			deactivate_board_cells($('#extreme_board').data('custom-holes'), $('#extreme_board').data('random-holes'))
 			set_board_border()
+			random_hole_puncher($('#extreme_board').data('random-iceless-holes'), 'iceless_hole')
 			$('body').keydown arrow_handler
 			create_random_extreme_tile()
 
@@ -261,7 +262,7 @@ $ ->
 
 	deactivate_board_cells = (custom_holes, random_holes) ->
 		custom_hole_puncher(custom_holes) unless custom_holes == undefined
-		random_hole_puncher(random_holes)
+		random_hole_puncher(random_holes, 'hole')
 
 	custom_hole_puncher = (custom_holes) ->
 		board_length = $('#extreme_board').data('length')
@@ -274,7 +275,7 @@ $ ->
 			new_hole.removeClass('active').addClass('hole')
 			new_hole.find('.extreme_board_inner_cell').remove()
 
-	random_hole_puncher = (random_holes) ->
+	random_hole_puncher = (random_holes, hole_type) ->
 		holey_indices = []
 		unholey_indices = []
 		board_length = $('#extreme_board').data('length')
@@ -292,8 +293,8 @@ $ ->
 			column = hole_i % board_length
 			column = board_length if (column == 0)
 			new_hole = $(".extreme_board_cell[data-row=#{row}][data-column=#{column}]")
-			new_hole.removeClass('active').addClass('hole')
-			new_hole.find('.extreme_board_inner_cell').remove()
+			new_hole.removeClass('active').addClass("#{hole_type}")
+			new_hole.find('.extreme_board_inner_cell').remove() if hole_type == 'hole'
 
 	cleanArray = (original) ->
 		newArray = new Array
@@ -515,7 +516,7 @@ $ ->
 			tile_axis_final_value = -1
 		general_axis_index = general_axis_initial_value
 		while general_axis_index <= general_axis_final_value
-			first_empty = tile_axis_initial_value
+			first_empty = first_empty_iceless_hole_check(tile_axis_initial_value, general_axis, tile_axis, general_axis_index)
 			tile_axis_index = tile_axis_initial_value
 			while tile_axis_index <= tile_axis_final_value
 				current_tile = $('.extreme_tile.' + general_axis + '_' + Math.abs(general_axis_index) + '.' + tile_axis + '_' + Math.abs(tile_axis_index))
@@ -525,12 +526,21 @@ $ ->
 							window.no_move = false
 						else
 							move_tile(current_tile, Math.abs(first_empty), tile_axis)
-					first_empty++
+					first_empty = first_empty_iceless_hole_check((first_empty + 1), general_axis, tile_axis, general_axis_index)
 				else
 					if $(".hole[data-#{general_axis}='#{Math.abs(general_axis_index)}'][data-#{tile_axis}='#{Math.abs(tile_axis_index)}']").length
-						first_empty = tile_axis_index + 1
+						first_empty = first_empty_iceless_hole_check((tile_axis_index + 1), general_axis, tile_axis, general_axis_index)
 				tile_axis_index++
 			general_axis_index++
+
+	first_empty_iceless_hole_check = ( first_empty_index, general_axis, tile_axis, general_axis_index) ->
+		banana = true
+		while banana
+			if $(".iceless_hole[data-#{general_axis}='#{Math.abs(general_axis_index)}'][data-#{tile_axis}='#{Math.abs(first_empty_index)}']").length
+				first_empty_index++
+			else
+				banana = false
+		first_empty_index
 
 	move_tile = (current_tile, first_empty, tile_axis) ->
 		$(current_tile).removeClass(tile_axis + "_" + (current_tile.data(tile_axis))).addClass(tile_axis + "_" + first_empty)

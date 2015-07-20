@@ -81,4 +81,9 @@ module ApplicationHelper
     dead_tile_drop_frequency = params[:dead_tile_drops]
     (['never', 'very rarely', 'sometimes', 'alarmingly frequently'].include? dead_tile_drop_frequency) ? dead_tile_drop_frequency : 'never'
   end
+
+  def extreme_board_random_iceless_holes
+    random_iceless_holes = params[:random_iceless_holes].to_i
+    random_iceless_holes.in?(0..25) ? random_iceless_holes : 0
+  end
 end
